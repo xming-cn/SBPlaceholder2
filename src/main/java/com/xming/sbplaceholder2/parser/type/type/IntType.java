@@ -15,7 +15,7 @@ public class IntType extends SBType<IntInst> {
         return "Int";
     }
     @Override
-    protected IntInst newInst(String str) {
+    public IntInst newInst(String str) {
         return new IntInst(Integer.parseInt(str));
     }
 }

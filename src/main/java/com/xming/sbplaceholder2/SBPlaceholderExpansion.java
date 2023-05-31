@@ -2,9 +2,12 @@ package com.xming.sbplaceholder2;
 
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 public class SBPlaceholderExpansion extends PlaceholderExpansion {
     @Override
@@ -30,7 +33,12 @@ public class SBPlaceholderExpansion extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         long startTime = System.currentTimeMillis();
-        SBInst<?> result = new Parser(params, null).parse(player);
+        Parser parser = new Parser(params, null);
+        System.out.println(Arrays.toString(parser.getExpression().operator));
+        for (EntrustInst entrustInst : parser.getExpression().entrust) {
+            if (entrustInst != null) System.out.println(entrustInst);
+        }
+        SBInst<?> result = parser.parse(player);
         long endTime = System.currentTimeMillis();
         System.out.println("run time: " + (endTime - startTime) + "ms");
         return result.toString();

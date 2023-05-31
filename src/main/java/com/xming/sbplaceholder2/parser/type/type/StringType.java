@@ -15,7 +15,7 @@ public class StringType extends SBType<StringInst> {
         return "String";
     }
     @Override
-    protected StringInst newInst(String str) {
+    public StringInst newInst(String str) {
         return new StringInst(str);
     }
 }

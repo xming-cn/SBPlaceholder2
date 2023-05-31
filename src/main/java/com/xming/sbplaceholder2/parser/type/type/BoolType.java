@@ -16,7 +16,7 @@ public class BoolType extends SBType<BoolInst> {
         return "Bool";
     }
     @Override
-    protected BoolInst newInst(String str) {
+    public BoolInst newInst(String str) {
         if (str.equalsIgnoreCase("true")) {
             return new BoolInst(true);
         }

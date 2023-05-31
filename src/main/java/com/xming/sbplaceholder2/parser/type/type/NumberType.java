@@ -15,7 +15,7 @@ public class NumberType extends SBType<NumberInst> {
         return "Number";
     }
     @Override
-    protected NumberInst newInst(String str) {
+    public NumberInst newInst(String str) {
         return new NumberInst(Float.parseFloat(str));
     }
 }

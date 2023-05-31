@@ -20,7 +20,7 @@ public class PlayerType extends SBType<PlayerInst> {
     }
 
     @Override
-    protected PlayerInst newInst(String str) {
+    public PlayerInst newInst(String str) {
         Player player = Bukkit.getPlayer(str);
         return new PlayerInst(player == null ? Bukkit.getOfflinePlayer(str) : player);
     }

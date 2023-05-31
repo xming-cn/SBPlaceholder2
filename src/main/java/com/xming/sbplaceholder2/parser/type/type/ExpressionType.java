@@ -18,11 +18,8 @@ public class ExpressionType extends SBType<ExpressionInst> {
         return "Expression";
     }
     @Override
-    protected ExpressionInst newInst(String str) {
-        // TODO: 2021/8/3
-        if (cache.containsKey(str)) return cache.get(str);
-        ExpressionInst expression = new ExpressionInst(null, str);
-        cache.put(str, expression);
-        return expression;
+    public ExpressionInst newInst(String str) {
+        if (!cache.containsKey(str)) cache.put(str, new ExpressionInst(str));
+        return cache.get(str).clone();
     }
 }

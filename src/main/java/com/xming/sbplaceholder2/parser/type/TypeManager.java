@@ -1,9 +1,6 @@
 package com.xming.sbplaceholder2.parser.type;
 
-import com.xming.sbplaceholder2.parser.type.type.BoolType;
-import com.xming.sbplaceholder2.parser.type.type.IntType;
-import com.xming.sbplaceholder2.parser.type.type.NumberType;
-import com.xming.sbplaceholder2.parser.type.type.StringType;
+import com.xming.sbplaceholder2.parser.type.type.*;
 
 import java.util.HashMap;
 
@@ -32,6 +29,8 @@ public class TypeManager {
         types.put("Int", new IntType());
         types.put("Number", new NumberType());
         types.put("String", new StringType());
+        types.put("Expression", new ExpressionType());
+        types.put("Player", new PlayerType());
     }
     public SBType<?> getType(String name) {
         for (String type : types.keySet()) {
