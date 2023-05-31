@@ -1,7 +1,6 @@
 package com.xming.sbplaceholder2.parser.type.type;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
-import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBType;
 import com.xming.sbplaceholder2.parser.type.inst.IntInst;
 import org.bukkit.plugin.Plugin;

@@ -17,7 +17,7 @@ public class TypeManager {
     }
     private TypeManager() {}
 
-    HashMap<String, SBType<?>> types = new HashMap<>();
+    final HashMap<String, SBType<?>> types = new HashMap<>();
     public void register(String key, SBType<?> type) {
         types.put(key, type);
     }

@@ -4,10 +4,11 @@ import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.type.NumberType;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class NumberInst extends SBInst<NumberType> {
-    Float value;
-    public NumberInst(Float value) {
+    @NotNull public final Float value;
+    public NumberInst(@NotNull Float value) {
         this.value = value;
     }
 

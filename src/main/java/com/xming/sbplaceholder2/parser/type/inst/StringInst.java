@@ -5,11 +5,12 @@ import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.type.StringType;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class StringInst extends SBInst<StringType> {
-    String value;
+    @NotNull public final String value;
 
-    public StringInst(String str) {
+    public StringInst(@NotNull String str) {
         this.value = str;
     }
 

@@ -4,10 +4,11 @@ import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.type.IntType;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class IntInst extends SBInst<IntType> {
-    Integer value;
-    public IntInst(Integer value) {
+    @NotNull public final Integer value;
+    public IntInst(@NotNull Integer value) {
         this.value = value;
     }
     @Override

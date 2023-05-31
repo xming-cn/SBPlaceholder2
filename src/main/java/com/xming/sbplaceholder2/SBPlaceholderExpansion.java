@@ -14,7 +14,7 @@ public class SBPlaceholderExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "s2";
+        return "s";
     }
 
     @Override
@@ -30,7 +30,7 @@ public class SBPlaceholderExpansion extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         long startTime = System.currentTimeMillis();
-        SBInst<?> result = new Parser(params).parse(player);
+        SBInst<?> result = new Parser(params, null).parse(player);
         long endTime = System.currentTimeMillis();
         System.out.println("run time: " + (endTime - startTime) + "ms");
         return result.toString();

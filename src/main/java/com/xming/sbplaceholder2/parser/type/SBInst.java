@@ -4,7 +4,10 @@ import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.exception.UnsupportedOperationException;
 import com.xming.sbplaceholder2.exception.UnsupportedSingleOperationException;
 import com.xming.sbplaceholder2.exception.UnsupportedTypeCastException;
-import com.xming.sbplaceholder2.parser.type.inst.*;
+import com.xming.sbplaceholder2.parser.type.inst.BoolInst;
+import com.xming.sbplaceholder2.parser.type.inst.IntInst;
+import com.xming.sbplaceholder2.parser.type.inst.NumberInst;
+import com.xming.sbplaceholder2.parser.type.inst.StringInst;
 import org.bukkit.plugin.Plugin;
 
 public abstract class SBInst<T extends SBType<?>> implements TypeInstanceOf<T> {
@@ -40,7 +43,7 @@ public abstract class SBInst<T extends SBType<?>> implements TypeInstanceOf<T> {
         throw new UnsupportedOperationException(this, other, "/");
     }
     public SBInst<?> symbol_mod(SBInst<?> other) {
-        throw new UnsupportedOperationException(this, other, "*");
+        throw new UnsupportedOperationException(this, other, "%");
     }
     public Integer symbol_compare(SBInst<?> other) {throw new UnsupportedOperationException(this, other, "compare");}
     public SBInst<?> symbol_equal(SBInst<?> other) {
@@ -69,5 +72,14 @@ public abstract class SBInst<T extends SBType<?>> implements TypeInstanceOf<T> {
     }
     public SBInst<?> symbol_not() {
         throw new UnsupportedSingleOperationException(this, "!");
+    }
+    public SBInst<?> symbol_getField(String name) {
+        throw new UnsupportedSingleOperationException(this, "getField");
+    }
+    public SBInst<?> symbol_runMethod(String name, SBInst<?>... args) {
+        throw new UnsupportedSingleOperationException(this, "runMethod");
+    }
+    public SBInst<?> symbol_call(SBInst<?>... args) {
+        throw new UnsupportedSingleOperationException(this, "symbol_call");
     }
 }

@@ -4,11 +4,12 @@ import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.type.BoolType;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class BoolInst extends SBInst<BoolType> {
-    Boolean value;
+    @NotNull public final Boolean value;
 
-    public BoolInst(boolean value) {
+    public BoolInst(@NotNull Boolean value) {
         this.value = value;
     }
     @Override
