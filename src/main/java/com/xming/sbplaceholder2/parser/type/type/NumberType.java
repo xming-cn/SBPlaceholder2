@@ -1,6 +1,7 @@
 package com.xming.sbplaceholder2.parser.type.type;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
+import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.SBType;
 import com.xming.sbplaceholder2.parser.type.inst.NumberInst;
 import org.bukkit.plugin.Plugin;
@@ -15,7 +16,7 @@ public class NumberType extends SBType<NumberInst> {
         return "Number";
     }
     @Override
-    public NumberInst newInst(String str) {
-        return new NumberInst(Float.parseFloat(str));
+    public NumberInst newInst(SBInst<?>... insts) {
+        return insts[0].asNumber();
     }
 }

@@ -1,4 +1,12 @@
-name: SBPlaceholder2
+name: SBPlaceholder
 version: '${project.version}'
 main: com.xming.sbplaceholder2.SBPlaceholder2
 api-version: 1.16
+
+commands:
+    sbplaceholder:
+        description: SBPlaceholder command
+        usage: /<command>
+        aliases: [sbp]
+        permission: sbplaceholder.command
+        permission-message: You don't have permission to use this command.

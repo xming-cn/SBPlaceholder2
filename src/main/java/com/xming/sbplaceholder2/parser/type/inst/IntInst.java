@@ -1,7 +1,10 @@
 package com.xming.sbplaceholder2.parser.type.inst;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
+import com.xming.sbplaceholder2.parser.InstMethod;
+import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
 import com.xming.sbplaceholder2.parser.type.type.IntType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -24,12 +27,8 @@ public class IntInst extends SBInst<IntType> {
         return value.toString();
     }
     @Override
-    public String toDebug() {
-        return "Int@" + value;
-    }
-    @Override
     public BoolInst asBool() {
-        return new BoolInst(value > 0);
+        return BoolInst.fromBool(value > 0);
     }
     @Override
     public IntInst asInt() {
@@ -38,10 +37,6 @@ public class IntInst extends SBInst<IntType> {
     @Override
     public NumberInst asNumber() {
         return new NumberInst(value.floatValue());
-    }
-    @Override
-    public StringInst asString() {
-        return new StringInst(value.toString());
     }
     @Override
     public IntInst symbol_add(SBInst<?> other) {
@@ -64,13 +59,24 @@ public class IntInst extends SBInst<IntType> {
         return new IntInst(value / otherInt.value);
     }
     @Override
-    public IntInst symbol_mod(SBInst<?> other) {
-        IntInst otherInt = other instanceof IntInst intInst ? intInst : other.asInt();
-        return new IntInst(value % otherInt.value);
-    }
-    @Override
     public Integer symbol_compare(SBInst<?> other) {
         IntInst otherInt = other instanceof IntInst intInst ? intInst : other.asInt();
         return value.compareTo(otherInt.value);
+    }
+    @InstMethod(name = "abs", returnType = "Int")
+    public SBInst<?> method_abs(Parser parser, EntrustInst... args) {
+        return new IntInst(Math.abs(value));
+    }
+    @InstMethod(name = "pow", args = {"Int"}, returnType = "Number")
+    public SBInst<?> method_pow(Parser parser, EntrustInst... args) {
+        PlayerInst player = parser.getPlayer();
+        IntInst arg1 = args[0].execute(parser, player.value).asInt();
+        return new NumberInst((float) Math.pow(value, arg1.value));
+    }
+    @InstMethod(name = "mod", args = {"Int"}, returnType = "Int")
+    public SBInst<?> method_mod(Parser parser, EntrustInst... args) {
+        PlayerInst player = parser.getPlayer();
+        IntInst arg1 = args[0].execute(parser, player.value).asInt();
+        return new IntInst(value % arg1.value);
     }
 }

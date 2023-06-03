@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.xming</groupId>
-    <artifactId>SBPlaceholder2</artifactId>
-    <version>1.0</version>
+    <artifactId>SBPlaceholder</artifactId>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
     <name>SBPlaceholder2</name>

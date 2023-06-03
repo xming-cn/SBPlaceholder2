@@ -1,6 +1,7 @@
 package com.xming.sbplaceholder2.parser.type.type;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
+import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.SBType;
 import com.xming.sbplaceholder2.parser.type.inst.PlayerInst;
 import org.bukkit.Bukkit;
@@ -20,8 +21,9 @@ public class PlayerType extends SBType<PlayerInst> {
     }
 
     @Override
-    public PlayerInst newInst(String str) {
-        Player player = Bukkit.getPlayer(str);
-        return new PlayerInst(player == null ? Bukkit.getOfflinePlayer(str) : player);
+    public PlayerInst newInst(SBInst<?>... insts) {
+        String name = insts[0].asString().value;
+        Player player = Bukkit.getPlayer(name);
+        return player == null ? PlayerInst.voidPlayer : new PlayerInst(player);
     }
 }

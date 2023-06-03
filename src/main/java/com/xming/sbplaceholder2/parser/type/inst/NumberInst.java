@@ -1,7 +1,10 @@
 package com.xming.sbplaceholder2.parser.type.inst;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
+import com.xming.sbplaceholder2.parser.InstMethod;
+import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
 import com.xming.sbplaceholder2.parser.type.type.NumberType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -25,12 +28,8 @@ public class NumberInst extends SBInst<NumberType> {
         return value.toString();
     }
     @Override
-    public String toDebug() {
-        return "Number@" + value;
-    }
-    @Override
     public BoolInst asBool() {
-        return new BoolInst(value > 0);
+        return BoolInst.fromBool(value > 0);
     }
     @Override
     public IntInst asInt() {
@@ -65,13 +64,26 @@ public class NumberInst extends SBInst<NumberType> {
         return new NumberInst(value / otherNumber.value);
     }
     @Override
-    public NumberInst symbol_mod(SBInst<?> other) {
-        NumberInst otherNumber = other instanceof NumberInst numberInst ? numberInst : other.asNumber();
-        return new NumberInst(value % otherNumber.value);
-    }
-    @Override
     public Integer symbol_compare(SBInst<?> other) {
         NumberInst otherNumber = other instanceof NumberInst numberInst ? numberInst : other.asNumber();
         return value.compareTo(otherNumber.value);
+    }
+    @InstMethod(name = "round", returnType = "Int")
+    public IntInst method_round(Parser parser, EntrustInst... args) {
+        return new IntInst(Math.round(value));
+    }
+    @InstMethod(name = "abs", returnType = "Number")
+    public NumberInst method_abs(Parser parser, EntrustInst... args) {
+        return new NumberInst(Math.abs(value));
+    }
+    @InstMethod(name = "pow", returnType = "Number", args = {"Number"})
+    public NumberInst method_pow(Parser parser, EntrustInst... args) {
+        double other = (double) args[0].execute(parser, null).asNumber().value;
+        return new NumberInst((float) Math.pow(value, other));
+    }
+    @InstMethod(name = "mod", returnType = "Number", args = {"Number"})
+    public NumberInst method_mod(Parser parser, EntrustInst... args) {
+        double other = (double) args[0].execute(parser, null).asNumber().value;
+        return new NumberInst((float) (value % other));
     }
 }

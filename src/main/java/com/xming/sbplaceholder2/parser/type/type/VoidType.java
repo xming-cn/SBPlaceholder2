@@ -3,10 +3,10 @@ package com.xming.sbplaceholder2.parser.type.type;
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.SBType;
-import com.xming.sbplaceholder2.parser.type.inst.BoolInst;
+import com.xming.sbplaceholder2.parser.type.inst.VoidInst;
 import org.bukkit.plugin.Plugin;
 
-public class BoolType extends SBType<BoolInst> {
+public class VoidType extends SBType<VoidInst> {
 
     @Override
     public Plugin getPlugin() {
@@ -17,7 +17,7 @@ public class BoolType extends SBType<BoolInst> {
         return "Bool";
     }
     @Override
-    public BoolInst newInst(SBInst<?>... insts) {
-        return insts[0].asBool();
+    public VoidInst newInst(SBInst<?>... insts) {
+        return VoidInst.instance;
     }
 }

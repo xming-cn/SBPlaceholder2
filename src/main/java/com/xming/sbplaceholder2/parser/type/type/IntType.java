@@ -1,6 +1,7 @@
 package com.xming.sbplaceholder2.parser.type.type;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
+import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.SBType;
 import com.xming.sbplaceholder2.parser.type.inst.IntInst;
 import org.bukkit.plugin.Plugin;
@@ -15,7 +16,7 @@ public class IntType extends SBType<IntInst> {
         return "Int";
     }
     @Override
-    public IntInst newInst(String str) {
-        return new IntInst(Integer.parseInt(str));
+    public IntInst newInst(SBInst<?>... insts) {
+        return insts[0].asInt();
     }
 }

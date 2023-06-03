@@ -36,10 +36,13 @@ public class EntrustTool {
                 int end = action.lastIndexOf(')');
                 String name = action.substring(0, start);
                 String[] strArgs = splitBy(action.substring(start + 1, end), ',').toArray(new String[0]);
-                ExpressionInst[] args = new ExpressionInst[strArgs.length];
+                EntrustInst[] args = new EntrustInst[strArgs.length];
+                ExpressionType expr = (ExpressionType) TypeManager.getInstance().getType("Expression");
                 for (int i = 0; i < strArgs.length; i++) {
-                    SBType<?> expr = TypeManager.getInstance().getType("Expression");
-                    args[i] = ((ExpressionType) expr).newInst(strArgs[i]);
+                    SBInst<?> inst = expr.newInst(strArgs[i]);
+                    if (inst instanceof ExpressionInst)
+                        args[i] = new EntrustInst(inst, new Task(Task.TaskType.SUB_EXPRESSION, null));
+                    else args[i] = new EntrustInst(inst);
                 }
                 entrust.addTask(new Task(Task.TaskType.CALL_METHOD, name, args));
             } else {
@@ -52,8 +55,11 @@ public class EntrustTool {
         if (str.startsWith("(") && str.endsWith(")")) {
             String substring = str.substring(1, str.length() - 1);
             SBType<?> expr = TypeManager.getInstance().getType("Expression");
-            entrust.addTask(new Task(Task.TaskType.SUB_EXPRESSION, null));
-            return ((ExpressionType) expr).newInst(substring);
+            SBInst<?> sbInst = ((ExpressionType) expr).newInst(substring);
+            if (sbInst instanceof ExpressionInst) {
+                entrust.addTask(new Task(Task.TaskType.SUB_EXPRESSION, null));
+            }
+            return sbInst;
         } else if (str.startsWith("\"") && str.endsWith("\"")) {
             return new StringInst(str.substring(1, str.length() - 1));
         } else if (str.startsWith("'") && str.endsWith("'")) {
@@ -61,23 +67,34 @@ public class EntrustTool {
         } else if (NumberUtils.isDigits(str)) {
             return new IntInst(NumberUtils.toInt(str));
         } else if (NumberUtils.isNumber(str)) {
+            System.out.println(str + " is a number but not a digit");
             return new NumberInst(NumberUtils.toFloat(str));
-        }  else if (str.equalsIgnoreCase("true")) {
-            return new BoolInst(true);
-        } else if (str.equalsIgnoreCase("false")) {
-            return new BoolInst(false);
+        } else if (str.equals("void")) {
+            return VoidInst.instance;
+        } else if (str.equals("true")) {
+            return BoolInst.trueInstance;
+        } else if (str.equals("false")) {
+            return BoolInst.falseInstance;
         } else if (str.endsWith(")")) {
             int start = str.indexOf('(');
-            String name = str.substring(0, start);
-            String[] strArgs = splitBy(str.substring(start + 1, str.length() - 1), ',').toArray(new String[0]);
-            ExpressionInst[] args = new ExpressionInst[strArgs.length];
-            for (int i = 0; i < strArgs.length; i++) {
-                SBType<?> expr = TypeManager.getInstance().getType("Expression");
-                args[i] = ((ExpressionType) expr).newInst(strArgs[i]);
+            if (start != -1) {
+                String name = str.substring(0, start);
+                String[] strArgs = splitBy(str.substring(start + 1, str.length() - 1), ',').toArray(new String[0]);
+                EntrustInst[] args = new EntrustInst[strArgs.length];
+                ExpressionType expr = (ExpressionType) TypeManager.getInstance().getType("Expression");
+                for (int i = 0; i < strArgs.length; i++) {
+                    SBInst<?> inst = expr.newInst(strArgs[i]);
+                    if (inst instanceof ExpressionInst)
+                        args[i] = new EntrustInst(inst, new Task(Task.TaskType.SUB_EXPRESSION, null));
+                    else args[i] = new EntrustInst(inst);
+                }
+                SBInst<?> instFromString = getInstFromString(entrust, name);
+                entrust.addTask(new Task(Task.TaskType.CALL_SELF, null, args));
+                return instFromString;
+            } else {
+                entrust.addTask(new Task(Task.TaskType.PARSE_VARIABLE, null));
+                return new StringInst(str);
             }
-            SBInst<?> instFromString = getInstFromString(entrust, name);
-            entrust.addTask(new Task(Task.TaskType.CALL_SELF, null, args));
-            return instFromString;
         } else {
             entrust.addTask(new Task(Task.TaskType.PARSE_VARIABLE, null));
             return new StringInst(str);
@@ -85,12 +102,19 @@ public class EntrustTool {
     }
     public static ArrayList<String> splitBy(String str, Character separator) {
         Character state = null;
+        int depth = 0;
         ArrayList<String> result = new ArrayList<>();
         StringBuilder this_object = new StringBuilder();
         for (char c : str.toCharArray()) {
             if (state == null) {
-                if (c == '(') state = ')';
-                else if (c == '"') state = '"';
+                if (c == '(') depth++;
+                else if (c == ')') depth--;
+                if (depth > 0) {
+                    this_object.append(c);
+                    continue;
+                }
+
+                if (c == '"') state = '"';
                 else if (c == '\'') state = '\'';
 
                 if (c == separator) {

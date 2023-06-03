@@ -1,12 +1,12 @@
 package com.xming.sbplaceholder2.parser.type.inst;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
+import com.xming.sbplaceholder2.common.ArrayUtils;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustTool;
 import com.xming.sbplaceholder2.parser.type.type.ExpressionType;
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 
@@ -24,14 +24,14 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
         int object_count = 0;
         int start_pos = 0;
         boolean in_string = false;
-        boolean in_bracket = false;
+        int in_bracket = 0;
         for (int i = 0; i < rawExpression.length(); i++) {
             if (rawExpression.charAt(i) == '\'' ||
                     rawExpression.charAt(i) == '\"') in_string = !in_string;
             if (in_string) continue;
-            if (rawExpression.charAt(i) == '(' ||
-                    rawExpression.charAt(i) == ')') in_bracket = !in_bracket;
-            if (in_bracket) continue;
+            if (rawExpression.charAt(i) == '(') in_bracket += 1;
+            else if (rawExpression.charAt(i) == ')') in_bracket -= 1;
+            if (in_bracket > 0) continue;
             for (String symbol : symbols) {
                 if (i + symbol.length() > rawExpression.length()) continue;
                 if (rawExpression.subSequence(i, i + symbol.length()).equals(symbol)) {
@@ -60,10 +60,7 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
     }
     @Override
     public String toString() {
-        return "ExpressionInst{" +
-                "object=" + ArrayUtils.toString(entrust) +
-                ", operator=" + ArrayUtils.toString(operator) +
-                '}';
+        return ArrayUtils.toString(entrust) + "~" + ArrayUtils.toString(operator);
     }
     public SBInst<?>[] execute(Parser parser, OfflinePlayer player) {
         SBInst<?>[] result = new SBInst<?>[entrust.length];
@@ -110,10 +107,6 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
                 }
                 case "/" -> {
                     object[this_object_pos] = object[this_object_pos].symbol_div(other_object);
-                    object[other_object_pos] = null;
-                }
-                case "%" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_mod(other_object);
                     object[other_object_pos] = null;
                 }
                 case ">" -> {
@@ -166,13 +159,17 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
             default -> -1;
         };
     }
-
     @Override
     public ExpressionInst clone() {
-        ExpressionInst expressionInst = new ExpressionInst();
-        expressionInst.max_length = max_length;
-        expressionInst.entrust = Arrays.copyOf(entrust, entrust.length);
-        expressionInst.operator = Arrays.copyOf(operator, operator.length);
-        return expressionInst;
+        ExpressionInst inst = new ExpressionInst();
+        inst.max_length = max_length;
+        inst.entrust = new EntrustInst[max_length + 1];
+        for (int i = 0; i < entrust.length; i++) {
+            if (entrust[i] != null)
+                inst.entrust[i] = (EntrustInst) entrust[i].clone();
+        }
+        inst.operator = new String[max_length];
+        System.arraycopy(operator, 0, inst.operator, 0, operator.length);
+        return inst;
     }
 }

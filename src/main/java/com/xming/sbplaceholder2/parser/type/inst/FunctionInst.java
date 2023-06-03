@@ -1,6 +1,7 @@
 package com.xming.sbplaceholder2.parser.type.inst;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
+import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.type.StringType;
 import org.bukkit.plugin.Plugin;
@@ -26,15 +27,11 @@ public class FunctionInst extends SBInst<StringType> {
 
     @Override
     public String toString() {
-        return "Function";
-    }
-    @Override
-    public String toDebug() {
-        return "Function@?";
+        return "func";
     }
 
     @Override
-    public SBInst<?> symbol_call(SBInst<?>... args) {
+    public SBInst<?> symbol_call(Parser parser, SBInst<?>... args) {
         return value.apply(args);
     }
 }
