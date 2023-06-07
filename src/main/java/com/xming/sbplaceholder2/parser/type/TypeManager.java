@@ -83,14 +83,17 @@ public class TypeManager {
         types.clear();
     }
     public void loadBuiltInTypes() {
-        register("Bool", new BoolType());
-        register("Int", new IntType());
-        register("Number", new NumberType());
-        register("String", new StringType());
-        register("Expression", new ExpressionType());
-        register("Player", new PlayerType());
-        register("List", new ListType());
-        register("Void", new VoidType());
+        BoolType.inst.register("Bool");
+        DictType.inst.register("Dict");
+        ExpressionType.inst.register("Expression");
+        FunctionType.inst.register("Function");
+        IntType.inst.register("Int");
+        ListType.inst.register("List");
+        NumberType.inst.register("Number");
+        PlayerType.inst.register("Player");
+        StringType.inst.register("String");
+        VoidType.inst.register("Void");
+        TypeType.inst.register("Type");
     }
     public SBType<?> getType(String name) {
         for (String type : types.keySet()) {

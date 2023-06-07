@@ -6,6 +6,8 @@ import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.TypeManager;
 import com.xming.sbplaceholder2.parser.type.inst.ExpressionInst;
 import com.xming.sbplaceholder2.parser.type.inst.StringInst;
+import com.xming.sbplaceholder2.parser.type.type.TypeType;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ public class EntrustInst implements Cloneable {
             }
             parser.depth++;
             object = switch (task.type()) {
-                case CALL_SELF -> object.symbol_call(parser, task.executeArgs(parser, player));
+                case CALL_SELF -> object.symbol_call(parser, task.args());
                 case CALL_METHOD -> {
                     TypeManager.SBMethod method = TypeManager.getInstance().getMethod(object, task.name());
                     yield method.trigger(parser, object, task.args());
@@ -57,6 +59,10 @@ public class EntrustInst implements Cloneable {
                     if (object instanceof StringInst inst) {
                         if (parser.getVariables().containsKey(inst.value)) {
                             yield parser.getVariables().get(inst.value);
+                        } else if (inst.value.startsWith("{") && inst.value.endsWith("}")) {
+                            yield new StringInst(PlaceholderAPI.setPlaceholders(player, inst.value.substring(1, inst.value.length() - 1)));
+                        } else if (TypeManager.getInstance().getTypes().contains(inst.value)) {
+                            yield TypeType.inst.newInst(inst);
                         } else {
                             // TODO: 2021/8/3
                             // kotlin like string template

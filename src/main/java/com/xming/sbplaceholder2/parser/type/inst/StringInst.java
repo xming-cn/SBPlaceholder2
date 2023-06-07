@@ -5,6 +5,7 @@ import com.xming.sbplaceholder2.parser.InstMethod;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
+import com.xming.sbplaceholder2.parser.type.type.ListType;
 import com.xming.sbplaceholder2.parser.type.type.StringType;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.lang.StringUtils;
@@ -194,5 +195,20 @@ public class StringInst extends SBInst<StringType> {
     @InstMethod(name = "trim", returnType = "String")
     public StringInst method_trim(Parser parser, EntrustInst[] args) {
         return new StringInst(value.trim());
+    }
+    @InstMethod(name = "chars", returnType = "List")
+    public ListInst method_chars(Parser parser, EntrustInst[] args) {
+        return ListType.inst.newInst(
+                value.chars().mapToObj(i -> new StringInst(String.valueOf((char) i))).toArray(StringInst[]::new)
+        );
+    }
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof StringInst && value.equals(((StringInst) obj).value);
     }
 }

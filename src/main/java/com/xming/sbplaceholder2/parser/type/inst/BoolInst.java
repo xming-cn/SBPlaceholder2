@@ -68,4 +68,14 @@ public class BoolInst extends SBInst<BoolType> {
     static public BoolInst fromBool(Boolean bool) {
         return bool ? trueInstance : falseInstance;
     }
+
+    @Override
+    public int hashCode() {
+        return toBool() ? 1 : 0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof BoolInst boolInst && boolInst.toBool() == toBool();
+    }
 }

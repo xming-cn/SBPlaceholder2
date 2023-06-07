@@ -1,8 +1,6 @@
 package com.xming.sbplaceholder2.parser.type.entrust;
 
 import com.xming.sbplaceholder2.parser.type.SBInst;
-import com.xming.sbplaceholder2.parser.type.SBType;
-import com.xming.sbplaceholder2.parser.type.TypeManager;
 import com.xming.sbplaceholder2.parser.type.inst.*;
 import com.xming.sbplaceholder2.parser.type.type.ExpressionType;
 import org.apache.commons.lang.math.NumberUtils;
@@ -37,9 +35,8 @@ public class EntrustTool {
                 String name = action.substring(0, start);
                 String[] strArgs = splitBy(action.substring(start + 1, end), ',').toArray(new String[0]);
                 EntrustInst[] args = new EntrustInst[strArgs.length];
-                ExpressionType expr = (ExpressionType) TypeManager.getInstance().getType("Expression");
                 for (int i = 0; i < strArgs.length; i++) {
-                    SBInst<?> inst = expr.newInst(strArgs[i]);
+                    SBInst<?> inst = ExpressionType.inst.newInst(strArgs[i]);
                     if (inst instanceof ExpressionInst)
                         args[i] = new EntrustInst(inst, new Task(Task.TaskType.SUB_EXPRESSION, null));
                     else args[i] = new EntrustInst(inst);
@@ -54,8 +51,7 @@ public class EntrustTool {
     public static SBInst<?> getInstFromString(EntrustInst entrust, String str) {
         if (str.startsWith("(") && str.endsWith(")")) {
             String substring = str.substring(1, str.length() - 1);
-            SBType<?> expr = TypeManager.getInstance().getType("Expression");
-            SBInst<?> sbInst = ((ExpressionType) expr).newInst(substring);
+            SBInst<?> sbInst = ExpressionType.inst.newInst(substring);
             if (sbInst instanceof ExpressionInst) {
                 entrust.addTask(new Task(Task.TaskType.SUB_EXPRESSION, null));
             }
@@ -81,9 +77,8 @@ public class EntrustTool {
                 String name = str.substring(0, start);
                 String[] strArgs = splitBy(str.substring(start + 1, str.length() - 1), ',').toArray(new String[0]);
                 EntrustInst[] args = new EntrustInst[strArgs.length];
-                ExpressionType expr = (ExpressionType) TypeManager.getInstance().getType("Expression");
                 for (int i = 0; i < strArgs.length; i++) {
-                    SBInst<?> inst = expr.newInst(strArgs[i]);
+                    SBInst<?> inst = ExpressionType.inst.newInst(strArgs[i]);
                     if (inst instanceof ExpressionInst)
                         args[i] = new EntrustInst(inst, new Task(Task.TaskType.SUB_EXPRESSION, null));
                     else args[i] = new EntrustInst(inst);

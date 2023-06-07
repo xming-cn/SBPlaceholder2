@@ -7,6 +7,8 @@ import com.xming.sbplaceholder2.parser.type.inst.VoidInst;
 import org.bukkit.plugin.Plugin;
 
 public class VoidType extends SBType<VoidInst> {
+    public static VoidType inst = new VoidType();
+    private VoidType() {}
 
     @Override
     public Plugin getPlugin() {

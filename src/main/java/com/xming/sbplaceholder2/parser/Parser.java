@@ -1,8 +1,6 @@
 package com.xming.sbplaceholder2.parser;
 
 import com.xming.sbplaceholder2.parser.type.SBInst;
-import com.xming.sbplaceholder2.parser.type.SBType;
-import com.xming.sbplaceholder2.parser.type.TypeManager;
 import com.xming.sbplaceholder2.parser.type.inst.*;
 import com.xming.sbplaceholder2.parser.type.type.ExpressionType;
 import org.bukkit.Bukkit;
@@ -22,8 +20,7 @@ public class Parser {
         this.raw_expression = str;
         this.debug = debug;
         if (variables == null) this.variables = new HashMap<>();
-        SBType<?> expr = TypeManager.getInstance().getType("Expression");
-        expression = ((ExpressionType) expr).newInst(raw_expression);
+        expression = ExpressionType.inst.newInst(raw_expression);
     }
     public Parser(String str, @Nullable HashMap<String, SBInst<?>> variables) {
         this(str, variables, -1);

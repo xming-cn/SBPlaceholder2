@@ -39,8 +39,14 @@ public abstract class SBInst<T extends SBType<?>> implements TypeInstanceOf<T>, 
     public SBInst<?> symbol_mul(SBInst<?> other) {
         throw new UnsupportedOperationException(this, other, "*");
     }
+    public SBInst<?> symbol_double_mul(SBInst<?> other) {
+        throw new UnsupportedOperationException(this, other, "**");
+    }
     public SBInst<?> symbol_div(SBInst<?> other) {
         throw new UnsupportedOperationException(this, other, "/");
+    }
+    public SBInst<?> symbol_double_div(SBInst<?> other) {
+        throw new UnsupportedOperationException(this, other, "//");
     }
     public Integer symbol_compare(SBInst<?> other) {throw new UnsupportedOperationException(this, other, "compare");}
     public SBInst<?> symbol_equal(SBInst<?> other) {
@@ -73,7 +79,7 @@ public abstract class SBInst<T extends SBType<?>> implements TypeInstanceOf<T>, 
     public SBInst<?> symbol_getField(Parser parser, String name) {
         throw new UnsupportedSingleOperationException(this, "getField");
     }
-    public SBInst<?> symbol_call(Parser parser, SBInst<?>... args) {
+    public SBInst<?> symbol_call(Parser parser, EntrustInst... args) {
         throw new UnsupportedSingleOperationException(this, "symbol_call");
     }
 
@@ -86,14 +92,22 @@ public abstract class SBInst<T extends SBType<?>> implements TypeInstanceOf<T>, 
         }
     }
     @InstMethod(name = "?", alias = {"ifVoid"}, args = {"Any"})
-    public SBInst<?> ifVoid(Parser parser, EntrustInst[] args) {
+    public SBInst<?> method_ifVoid(Parser parser, EntrustInst... args) {
         PlayerInst player = parser.getPlayer();
         if (this.equals(VoidInst.instance)) {
             return args[0].execute(parser, player.value);
         } else return this;
     }
-    @InstMethod(name = "asString", alias = {"toString"}, returnType = "Bool")
-    public StringInst asString(Parser parser, EntrustInst[] args) {
+    @InstMethod(name = "asString", alias = {"toString"}, returnType = "String")
+    public StringInst method_asString(Parser parser, EntrustInst... args) {
         return asString();
+    }
+    @InstMethod(name = "debug", alias = {"asDebug", "toDebug"}, returnType = "String")
+    public StringInst method_debug(Parser parser, EntrustInst... args) {
+        return new StringInst(toDebug());
+    }
+    @InstMethod(name = "type", alias = {"class"}, returnType = "Type")
+    public SBInst<?> method_type(Parser parser, EntrustInst... args) {
+        return new TypeInst(this.getName());
     }
 }

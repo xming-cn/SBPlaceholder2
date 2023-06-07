@@ -9,14 +9,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class PlayerType extends SBType<PlayerInst> {
+    public static PlayerType inst = new PlayerType();
+    private PlayerType() {}
 
     @Override
-    protected Plugin getPlugin() {
+    public Plugin getPlugin() {
         return SBPlaceholder2.plugin;
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Player";
     }
 

@@ -7,6 +7,8 @@ import com.xming.sbplaceholder2.parser.type.inst.IntInst;
 import org.bukkit.plugin.Plugin;
 
 public class IntType extends SBType<IntInst> {
+    public static IntType inst = new IntType();
+    private IntType() {}
     @Override
     public Plugin getPlugin() {
         return SBPlaceholder2.plugin;

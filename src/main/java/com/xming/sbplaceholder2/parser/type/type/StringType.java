@@ -7,6 +7,8 @@ import com.xming.sbplaceholder2.parser.type.inst.StringInst;
 import org.bukkit.plugin.Plugin;
 
 public class StringType extends SBType<StringInst> {
+    public static StringType inst = new StringType();
+    private StringType() {}
     @Override
     public Plugin getPlugin() {
         return SBPlaceholder2.plugin;

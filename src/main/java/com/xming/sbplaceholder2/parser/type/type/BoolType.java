@@ -7,7 +7,8 @@ import com.xming.sbplaceholder2.parser.type.inst.BoolInst;
 import org.bukkit.plugin.Plugin;
 
 public class BoolType extends SBType<BoolInst> {
-
+    public static BoolType inst = new BoolType();
+    private BoolType() {}
     @Override
     public Plugin getPlugin() {
         return SBPlaceholder2.plugin;

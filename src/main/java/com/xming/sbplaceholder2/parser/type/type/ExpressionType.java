@@ -10,7 +10,8 @@ import org.bukkit.plugin.Plugin;
 import java.util.HashMap;
 
 public class ExpressionType extends SBType<SBInst<?>> {
-    // TODO: Flexible caching
+    public static ExpressionType inst = new ExpressionType();
+    private ExpressionType() {}
     public static final HashMap<String, SBInst<?>> cache = new HashMap<>();
     @Override
     public Plugin getPlugin() {

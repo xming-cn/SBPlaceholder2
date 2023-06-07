@@ -64,6 +64,16 @@ public class NumberInst extends SBInst<NumberType> {
         return new NumberInst(value / otherNumber.value);
     }
     @Override
+    public NumberInst symbol_double_div(SBInst<?> other) {
+        NumberInst otherNumber = other instanceof NumberInst numberInst ? numberInst : other.asNumber();
+        return new NumberInst((float)(int)(value / otherNumber.value));
+    }
+    @Override
+    public NumberInst symbol_double_mul(SBInst<?> other) {
+        IntInst otherInt = other instanceof IntInst intInst ? intInst : other.asInt();
+        return new NumberInst((float)Math.pow(value, otherInt.value));
+    }
+    @Override
     public Integer symbol_compare(SBInst<?> other) {
         NumberInst otherNumber = other instanceof NumberInst numberInst ? numberInst : other.asNumber();
         return value.compareTo(otherNumber.value);
@@ -85,5 +95,14 @@ public class NumberInst extends SBInst<NumberType> {
     public NumberInst method_mod(Parser parser, EntrustInst... args) {
         double other = (double) args[0].execute(parser, null).asNumber().value;
         return new NumberInst((float) (value % other));
+    }
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof NumberInst numberInst && numberInst.value.equals(value);
     }
 }

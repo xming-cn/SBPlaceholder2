@@ -31,8 +31,11 @@ public class ListInst extends SBInst<ListType> {
     }
     @Override
     public String toDebug() {
-        if (value.size() < 6) return super.toDebug();
-        return "[" + value.get(0) + ", " + value.get(1) + ", ...(" + (value.size()-3) + "), " + value.get(value.size()-1) + " ]";
+        if (value.size() < 6) {
+            return "List@[" + Joiner.on(", ").join(value.stream().map(SBInst::toDebug).toArray(String[]::new)) + "]";
+        } else {
+            return "List@[" + value.get(0).toDebug() + ", " + value.get(1).toDebug() + ", ...(" + (value.size() - 3) + "), " + value.get(value.size() - 1).toDebug() + " ]";
+        }
     }
     public void addAll(SBInst<?>... insts) {
         value.addAll(Arrays.asList(insts));
@@ -52,7 +55,6 @@ public class ListInst extends SBInst<ListType> {
     public SBInst<?> symbol_getField(Parser parser, String name) {
         return value.get(Integer.parseInt(name));
     }
-
     @InstMethod(name = "size", alias = {"length"}, returnType = "Int")
     public IntInst method_size(Parser parser, EntrustInst... args) {
         return new IntInst(value.size());
@@ -87,22 +89,38 @@ public class ListInst extends SBInst<ListType> {
     @InstMethod(name = "map", args = {"Entrust"}, returnType = "List")
     public ListInst method_map(Parser parser, EntrustInst... args) {
         PlayerInst player = parser.getPlayer();
-        EntrustInst arg1 = args[0];
+        String each;
+        EntrustInst run;
+        if (args.length > 1) {
+            each = args[0].execute(parser, player.value).asString().value;
+            run = args[1];
+        } else {
+            each = "it";
+            run = args[0];
+        }
         ListInst result = new ListInst();
         for (SBInst<?> inst : value) {
-            parser.getVariables().put("it", inst);
-            result.append(arg1.execute(parser, player.value));
+            parser.getVariables().put(each, inst);
+            result.append(run.execute(parser, player.value));
         }
         return result;
     }
     @InstMethod(name = "filter", args = {"Entrust"}, returnType = "List")
     public ListInst method_filter(Parser parser, EntrustInst... args) {
         PlayerInst player = parser.getPlayer();
-        EntrustInst arg1 = args[0];
+        String each;
+        EntrustInst run;
+        if (args.length > 1) {
+            each = args[0].execute(parser, player.value).asString().value;
+            run = args[1];
+        } else {
+            each = "it";
+            run = args[0];
+        }
         ListInst result = new ListInst();
         for (SBInst<?> inst : value) {
-            parser.getVariables().put("it", inst);
-            if (arg1.execute(parser, player.value).asBool().toBool()) {
+            parser.getVariables().put(each, inst);
+            if (run.execute(parser, player.value).asBool().toBool()) {
                 result.append(inst);
             }
         }
@@ -120,11 +138,6 @@ public class ListInst extends SBInst<ListType> {
             result.add(value.get(i));
         }
         return new ListInst(result.toArray(new SBInst<?>[0]));
-    }
-    @InstMethod(name = "clear", returnType = "List")
-    public ListInst method_clear(Parser parser, EntrustInst... args) {
-        value.clear();
-        return this;
     }
     @InstMethod(name = "remove", args = {"Int"}, returnType = "List")
     public ListInst method_remove(Parser parser, EntrustInst... args) {

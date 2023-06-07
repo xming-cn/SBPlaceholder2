@@ -45,4 +45,16 @@ public class PlayerInst extends SBInst<PlayerType> {
             default -> new StringInst("undefined element");
         };
     }
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof PlayerInst playerInst) {
+            return value.equals(playerInst.value);
+        }
+        return false;
+    }
 }

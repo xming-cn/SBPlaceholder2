@@ -109,6 +109,14 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
                     object[this_object_pos] = object[this_object_pos].symbol_div(other_object);
                     object[other_object_pos] = null;
                 }
+                case "**" -> {
+                    object[this_object_pos] = object[this_object_pos].symbol_double_mul(other_object);
+                    object[other_object_pos] = null;
+                }
+                case "//" -> {
+                    object[this_object_pos] = object[this_object_pos].symbol_double_div(other_object);
+                    object[other_object_pos] = null;
+                }
                 case ">" -> {
                     object[this_object_pos] = object[this_object_pos].symbol_greater(other_object);
                     object[other_object_pos] = null;
@@ -149,7 +157,8 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
     }
     private int getPriority(String s) {
         return switch (s) {
-            case "*", "/", "%" -> 6;
+            case "**" -> 7;
+            case "*", "/", "%", "//" -> 6;
             case "+", "-" -> 5;
             case ">", "<", ">=", "<=" -> 4;
             case "==", "!=" -> 3;
