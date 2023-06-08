@@ -77,12 +77,6 @@ public class IntInst extends SBInst<IntType> {
     public SBInst<?> method_abs(Parser parser, EntrustInst... args) {
         return new IntInst(Math.abs(value));
     }
-    @InstMethod(name = "pow", args = {"Int"}, returnType = "Number")
-    public SBInst<?> method_pow(Parser parser, EntrustInst... args) {
-        PlayerInst player = parser.getPlayer();
-        IntInst arg1 = args[0].execute(parser, player.value).asInt();
-        return new NumberInst((float) Math.pow(value, arg1.value));
-    }
     @InstMethod(name = "mod", args = {"Int"}, returnType = "Int")
     public SBInst<?> method_mod(Parser parser, EntrustInst... args) {
         PlayerInst player = parser.getPlayer();
@@ -93,7 +87,6 @@ public class IntInst extends SBInst<IntType> {
     public int hashCode() {
         return value.hashCode();
     }
-
     @Override
     public boolean equals(Object obj) {
         return obj instanceof IntInst intInst && intInst.value.equals(value);

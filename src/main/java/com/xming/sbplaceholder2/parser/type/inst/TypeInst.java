@@ -36,14 +36,12 @@ public class TypeInst extends SBInst<TypeType> {
     public Object clone() {
         return new TypeInst(value);
     }
-
     @Override
     public SBInst<?> symbol_call(Parser parser, EntrustInst... args) {
         return value.newInst(Arrays.stream(args)
                 .map(it -> it.execute(parser, parser.getPlayer().value))
                 .toArray(SBInst<?>[]::new));
     }
-
     @Override
     public int hashCode() {
         return value.hashCode();

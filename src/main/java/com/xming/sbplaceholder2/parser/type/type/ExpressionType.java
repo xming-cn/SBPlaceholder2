@@ -22,9 +22,9 @@ public class ExpressionType extends SBType<SBInst<?>> {
         return "Expression";
 }
     public SBInst<?> newInst(String string) {
-        while (string.startsWith("(") && string.endsWith(")")) {
-            string = string.substring(1, string.length() - 1);
-        }
+//        while (string.startsWith("(") && string.endsWith(")")) {
+//            string = string.substring(1, string.length() - 1);
+//        }
 
         if (string.isEmpty()) cache.put(string, new StringInst(""));
         else if (NumberUtils.isDigits(string)) cache.put(string, new IntInst(Integer.parseInt(string)));

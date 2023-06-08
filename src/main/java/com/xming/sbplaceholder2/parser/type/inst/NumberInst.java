@@ -86,11 +86,6 @@ public class NumberInst extends SBInst<NumberType> {
     public NumberInst method_abs(Parser parser, EntrustInst... args) {
         return new NumberInst(Math.abs(value));
     }
-    @InstMethod(name = "pow", returnType = "Number", args = {"Number"})
-    public NumberInst method_pow(Parser parser, EntrustInst... args) {
-        double other = (double) args[0].execute(parser, null).asNumber().value;
-        return new NumberInst((float) Math.pow(value, other));
-    }
     @InstMethod(name = "mod", returnType = "Number", args = {"Number"})
     public NumberInst method_mod(Parser parser, EntrustInst... args) {
         double other = (double) args[0].execute(parser, null).asNumber().value;

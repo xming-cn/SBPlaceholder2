@@ -99,7 +99,7 @@ public class StringInst extends SBInst<StringType> {
         }
         return new StringInst(PlaceholderAPI.setPlaceholders(p, "%" + value + "%"));
     }
-    @InstMethod(name = "color", args = {"Char?"}, returnType = "String")
+    @InstMethod(name = "color", args = {"String?"}, returnType = "String")
     public StringInst method_color(Parser parser, EntrustInst[] args) {
         OfflinePlayer player = parser.getPlayer().value;
         SBInst<?> arg1 = args[0].execute(parser, player);
@@ -107,6 +107,7 @@ public class StringInst extends SBInst<StringType> {
         return new StringInst(ChatColor.translateAlternateColorCodes(c, value));
     }
     @InstMethod(name = "slice", alias = "substring", args = {"Int", "Int?"}, returnType = "String")
+    // 返回从 start 到 end 的子字符串，包括 start 位置的字符，但不包括 end 位置的字符。
     public StringInst method_slice(Parser parser, EntrustInst[] args) {
         OfflinePlayer player = parser.getPlayer().value;
         IntInst arg1 = args[0].execute(parser, player).asInt();
@@ -164,11 +165,11 @@ public class StringInst extends SBInst<StringType> {
         String str = args[0].execute(parser, player).asString().value;
         return BoolInst.fromBool(value.contains(str));
     }
-    @InstMethod(name = "split", args = {"String"}, returnType = "List")
+    @InstMethod(name = "split", args = {"String?"}, returnType = "List")
     public ListInst method_split(Parser parser, EntrustInst[] args) {
         OfflinePlayer player = parser.getPlayer().value;
-        String regex = args[0].execute(parser, player).asString().value;
-        String[] split = value.split(regex);
+        SBInst<?> arg1 = args[0].execute(parser, player);
+        String[] split = value.split(arg1.equals(VoidInst.instance) ? " " : arg1.asString().value);
         StringInst[] insts = Arrays.stream(split).map(StringInst::new).toArray(StringInst[]::new);
         return new ListInst(insts);
     }
@@ -206,7 +207,6 @@ public class StringInst extends SBInst<StringType> {
     public int hashCode() {
         return value.hashCode();
     }
-
     @Override
     public boolean equals(Object obj) {
         return obj instanceof StringInst && value.equals(((StringInst) obj).value);

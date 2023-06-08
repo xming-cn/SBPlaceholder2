@@ -2,6 +2,7 @@ package com.xming.sbplaceholder2.parser.type.inst;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.common.ArrayUtils;
+import com.xming.sbplaceholder2.parser.InstMethod;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
@@ -13,7 +14,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.Arrays;
 
 public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable {
-    static final String[] symbols = {"+", "-", "*", "/", "%", ">=", "<=", ">", "<", "==", "!=", "&&", "||", "!"};
+    static final String[] symbols = {"+", "-", "**", "*", "//", "/", "%", ">=", "<=", ">", "<", "==", "!=", "&&", "||", "!"};
     int max_length = 4;
     public EntrustInst[] entrust = new EntrustInst[max_length + 1];
     public String[] operator = new String[max_length];
@@ -45,6 +46,8 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
                     this.operator[object_count - 1] = symbol;
                     this.entrust[object_count - 1] = EntrustTool.parse(rawExpression.substring(start_pos, i));
                     start_pos = i + symbol.length();
+                    i += symbol.length() - 1;
+                    break;
                 }
             }
         }
@@ -181,4 +184,10 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
         System.arraycopy(operator, 0, inst.operator, 0, operator.length);
         return inst;
     }
+
+    @InstMethod(name = "parse", returnType = "Any")
+    public SBInst<?> method_parse(Parser parser, EntrustInst... args) {
+        return parse(parser, parser.getPlayer().value);
+    }
+
 }

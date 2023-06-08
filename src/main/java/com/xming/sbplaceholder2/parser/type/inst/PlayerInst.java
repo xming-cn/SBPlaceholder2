@@ -1,6 +1,7 @@
 package com.xming.sbplaceholder2.parser.type.inst;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
+import com.xming.sbplaceholder2.parser.InstMethod;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBInst;
 import com.xming.sbplaceholder2.parser.type.type.PlayerType;
@@ -48,6 +49,11 @@ public class PlayerInst extends SBInst<PlayerType> {
     @Override
     public int hashCode() {
         return value.hashCode();
+    }
+
+    @InstMethod(name = "online", alias = {"isOnline"}, returnType = "Bool")
+    public SBInst<?> method_online() {
+        return BoolInst.fromBool(value.isOnline());
     }
 
     @Override

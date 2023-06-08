@@ -17,7 +17,6 @@ public class FunctionInst extends SBInst<FunctionType> {
     public FunctionInst(@NotNull Function<SBInst<?>[], SBInst<?>> func) {
         this.value = func;
     }
-
     @Override
     public Plugin getPlugin() {
         return SBPlaceholder2.plugin;
@@ -26,12 +25,10 @@ public class FunctionInst extends SBInst<FunctionType> {
     public String getName() {
         return "Function";
     }
-
     @Override
     public String toString() {
         return "func";
     }
-
     @Override
     public SBInst<?> symbol_call(Parser parser, EntrustInst... args) {
         return value.apply(Arrays.stream(args)
