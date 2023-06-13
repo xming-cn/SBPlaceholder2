@@ -1,9 +1,9 @@
 package com.xming.sbplaceholder2;
 
 import com.xming.sbplaceholder2.parser.Parser;
-import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
-import com.xming.sbplaceholder2.parser.type.inst.ExpressionInst;
+import com.xming.sbplaceholder2.parser.type.inst.ExpressionElement;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +51,7 @@ public class SBPlaceholderExpansion extends PlaceholderExpansion {
 
         long endTime = 0;
         if (debug >= 0) {
-            if (parser.getExpression() instanceof ExpressionInst expressionInst) {
+            if (parser.getExpression() instanceof ExpressionElement expressionInst) {
                 SBPlaceholder2.logger.info(Arrays.toString(expressionInst.operator));
                 for (EntrustInst entrustInst : expressionInst.entrust) {
                     if (entrustInst != null) System.out.println(entrustInst);
@@ -62,7 +62,7 @@ public class SBPlaceholderExpansion extends PlaceholderExpansion {
 
             endTime = System.currentTimeMillis();
         }
-        SBInst<?> result = parser.parse(player);
+        SBElement<?> result = parser.parse(player);
         if (debug >= 0) SBPlaceholder2.logger.info("run time: " + (endTime - startTime) + "ms");
 
         return result.toString();

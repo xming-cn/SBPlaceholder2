@@ -1,12 +1,16 @@
 package com.xming.sbplaceholder2.parser.type.type;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
-import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.Parser;
+import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.SBType;
-import com.xming.sbplaceholder2.parser.type.inst.ListInst;
+import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
+import com.xming.sbplaceholder2.parser.type.inst.ListElement;
 import org.bukkit.plugin.Plugin;
 
-public class ListType extends SBType<ListInst> {
+import java.util.Arrays;
+
+public class ListType extends SBType<ListElement> {
     public static ListType inst = new ListType();
     private ListType() {}
     @Override
@@ -18,7 +22,9 @@ public class ListType extends SBType<ListInst> {
         return "List";
     }
     @Override
-    public ListInst newInst(SBInst<?>... insts) {
-        return new ListInst(insts);
+    public ListElement newInst(Parser parser, EntrustInst... insts) {
+        return new ListElement(Arrays.stream(insts)
+                .map(inst -> inst.execute(parser))
+                .toArray(SBElement[]::new));
     }
 }

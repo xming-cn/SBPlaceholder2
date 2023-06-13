@@ -1,13 +1,13 @@
 package com.xming.sbplaceholder2.parser.type.inst;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
-import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.type.VoidType;
 import org.bukkit.plugin.Plugin;
 
-public class VoidInst extends SBInst<VoidType> {
-    public static final VoidInst instance = new VoidInst();
-    private VoidInst() {
+public class VoidElement extends SBElement<VoidType> {
+    public static final VoidElement instance = new VoidElement();
+    private VoidElement() {
     }
     @Override
     public Plugin getPlugin() {
@@ -33,6 +33,6 @@ public class VoidInst extends SBInst<VoidType> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof VoidInst;
+        return obj instanceof VoidElement;
     }
 }

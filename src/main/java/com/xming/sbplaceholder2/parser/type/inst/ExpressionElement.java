@@ -2,26 +2,25 @@ package com.xming.sbplaceholder2.parser.type.inst;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.common.ArrayUtils;
-import com.xming.sbplaceholder2.parser.InstMethod;
+import com.xming.sbplaceholder2.parser.ElementMethod;
 import com.xming.sbplaceholder2.parser.Parser;
-import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustTool;
 import com.xming.sbplaceholder2.parser.type.type.ExpressionType;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 
-public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable {
+public class ExpressionElement extends SBElement<ExpressionType> implements Cloneable {
     static final String[] symbols = {"+", "-", "**", "*", "//", "/", "%", ">=", "<=", ">", "<", "==", "!=", "&&", "||", "!"};
     int max_length = 4;
     public EntrustInst[] entrust = new EntrustInst[max_length + 1];
     public String[] operator = new String[max_length];
 
-    private ExpressionInst() {
+    private ExpressionElement() {
     }
-    public ExpressionInst(String rawExpression) {
+    public ExpressionElement(String rawExpression) {
         int object_count = 0;
         int start_pos = 0;
         boolean in_string = false;
@@ -65,16 +64,16 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
     public String toString() {
         return ArrayUtils.toString(entrust) + "~" + ArrayUtils.toString(operator);
     }
-    public SBInst<?>[] execute(Parser parser, OfflinePlayer player) {
-        SBInst<?>[] result = new SBInst<?>[entrust.length];
+    public SBElement<?>[] execute(Parser parser) {
+        SBElement<?>[] result = new SBElement<?>[entrust.length];
         for (int i = 0; i < entrust.length; i++) {
             if (entrust[i] != null)
-                result[i] = entrust[i].execute(parser, player);
+                result[i] = entrust[i].execute(parser);
         }
         return result;
     }
-    public SBInst<?> parse(Parser parser, OfflinePlayer player) {
-        SBInst<?>[] object = execute(parser, player);
+    public SBElement<?> parse(Parser parser) {
+        SBElement<?>[] object = execute(parser);
         while (true) {
             int max_priority = -1;
             int max_priority_pos = -1;
@@ -92,7 +91,7 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
             while (object[this_object_pos] == null) this_object_pos -= 1;
             int other_object_pos = this_object_pos + 1;
             while (object[other_object_pos] == null) other_object_pos += 1;
-            SBInst<?> other_object = object[other_object_pos];
+            SBElement<?> other_object = object[other_object_pos];
 
             String symbol = operator[max_priority_pos];
             switch (symbol) {
@@ -172,8 +171,8 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
         };
     }
     @Override
-    public ExpressionInst clone() {
-        ExpressionInst inst = new ExpressionInst();
+    public ExpressionElement clone() {
+        ExpressionElement inst = new ExpressionElement();
         inst.max_length = max_length;
         inst.entrust = new EntrustInst[max_length + 1];
         for (int i = 0; i < entrust.length; i++) {
@@ -185,9 +184,9 @@ public class ExpressionInst extends SBInst<ExpressionType> implements Cloneable 
         return inst;
     }
 
-    @InstMethod(name = "parse", returnType = "Any")
-    public SBInst<?> method_parse(Parser parser, EntrustInst... args) {
-        return parse(parser, parser.getPlayer().value);
+    @ElementMethod(name = "parse", returnType = "Any")
+    public SBElement<?> method_parse(Parser parser, EntrustInst... args) {
+        return parse(parser);
     }
 
 }

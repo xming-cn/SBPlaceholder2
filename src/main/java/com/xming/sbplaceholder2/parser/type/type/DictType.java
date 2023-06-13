@@ -1,12 +1,16 @@
 package com.xming.sbplaceholder2.parser.type.type;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
-import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.Parser;
+import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.SBType;
-import com.xming.sbplaceholder2.parser.type.inst.DictInst;
+import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
+import com.xming.sbplaceholder2.parser.type.inst.DictElement;
 import org.bukkit.plugin.Plugin;
 
-public class DictType extends SBType<DictInst> {
+import java.util.Arrays;
+
+public class DictType extends SBType<DictElement> {
     public static DictType inst = new DictType();
     private DictType() {}
     @Override
@@ -15,10 +19,12 @@ public class DictType extends SBType<DictInst> {
     }
     @Override
     public String getName() {
-        return "Map";
+        return "Dict";
     }
     @Override
-    public DictInst newInst(SBInst<?>... insts) {
-        return new DictInst(insts);
+    public DictElement newInst(Parser parser, EntrustInst... insts) {
+        return new DictElement(Arrays.stream(insts)
+                .map(inst -> inst.execute(parser))
+                .toArray(SBElement[]::new));
     }
 }

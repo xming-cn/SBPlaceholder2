@@ -2,10 +2,10 @@ package com.xming.sbplaceholder2.parser.type.entrust;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.Parser;
-import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.TypeManager;
-import com.xming.sbplaceholder2.parser.type.inst.ExpressionInst;
-import com.xming.sbplaceholder2.parser.type.inst.StringInst;
+import com.xming.sbplaceholder2.parser.type.inst.ExpressionElement;
+import com.xming.sbplaceholder2.parser.type.inst.StringElement;
 import com.xming.sbplaceholder2.parser.type.type.TypeType;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.OfflinePlayer;
@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class EntrustInst implements Cloneable {
-    SBInst<?> object;
+    SBElement<?> object;
     ArrayList<Task> tasks = null;
     public EntrustInst() {}
-    public EntrustInst(SBInst<?> object, Task... task) {
+    public EntrustInst(SBElement<?> object, Task... task) {
         this.object = object;
         if (task != null) {
             this.tasks = new ArrayList<>();
@@ -28,11 +28,14 @@ public class EntrustInst implements Cloneable {
         if (this.tasks == null) tasks = new ArrayList<>();
         tasks.add(task);
     }
-    public SBInst<?> execute(Parser parser, OfflinePlayer player) {
+    public SBElement<?> execute(Parser parser) {
+        return execute(parser, parser.getPlayer().value);
+    }
+    public SBElement<?> execute(Parser parser, OfflinePlayer player) {
         if (tasks == null) return object;
-        SBInst<?> object;
+        SBElement<?> object;
         try {
-            object = (SBInst<?>) this.object.clone();
+            object = (SBElement<?>) this.object.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
             return null;
@@ -54,15 +57,18 @@ public class EntrustInst implements Cloneable {
                     yield method.trigger(parser, object, task.args());
                 }
                 case GET_FIELD -> object.symbol_getField(parser, task.name());
-                case SUB_EXPRESSION -> ((ExpressionInst) object).parse(parser, player);
+                case SUB_EXPRESSION -> ((ExpressionElement) object).parse(parser);
                 case PARSE_VARIABLE -> {
-                    if (object instanceof StringInst inst) {
+                    if (object instanceof StringElement inst) {
                         if (parser.getVariables().containsKey(inst.value)) {
                             yield parser.getVariables().get(inst.value);
+                        } else if (parser.global_variables.containsKey(inst.value)) {
+                            yield parser.global_variables.get(inst.value);
                         } else if (inst.value.startsWith("{") && inst.value.endsWith("}")) {
-                            yield new StringInst(PlaceholderAPI.setPlaceholders(player, inst.value.substring(1, inst.value.length() - 1)));
+                            yield new StringElement(PlaceholderAPI.setPlaceholders(
+                                    player, "%" + inst.value.substring(1, inst.value.length() - 1) + "%"));
                         } else if (TypeManager.getInstance().getTypes().contains(inst.value)) {
-                            yield TypeType.inst.newInst(inst);
+                            yield TypeType.inst.newInst(inst.asString().value);
                         } else {
                             // TODO: 2021/8/3
                             // kotlin like string template
@@ -91,7 +97,7 @@ public class EntrustInst implements Cloneable {
         return result.toString();
     }
 
-    public void setObject(SBInst<?> object) {
+    public void setObject(SBElement<?> object) {
         this.object = object;
     }
 
@@ -99,7 +105,7 @@ public class EntrustInst implements Cloneable {
     public Object clone() {
         try {
             EntrustInst inst = (EntrustInst) super.clone();
-            inst.object = (SBInst<?>) object.clone();
+            inst.object = (SBElement<?>) object.clone();
             if (tasks == null) return inst;
             inst.tasks = new ArrayList<>();
             for (Task task : tasks) {

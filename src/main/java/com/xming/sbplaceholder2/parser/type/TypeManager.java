@@ -1,10 +1,10 @@
 package com.xming.sbplaceholder2.parser.type;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
-import com.xming.sbplaceholder2.parser.InstMethod;
+import com.xming.sbplaceholder2.parser.ElementMethod;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
-import com.xming.sbplaceholder2.parser.type.inst.VoidInst;
+import com.xming.sbplaceholder2.parser.type.inst.VoidElement;
 import com.xming.sbplaceholder2.parser.type.type.*;
 import org.apache.commons.lang.ArrayUtils;
 
@@ -27,11 +27,11 @@ public class TypeManager {
     public void register(String key, SBType<?> type) {
         types.put(key, type);
     }
-    public SBMethod getMethod(SBInst<?> type, String name) {
+    public SBMethod getMethod(SBElement<?> type, String name) {
         method.computeIfAbsent(type.getName(), k -> new HashMap<>());
         if (!method.get(type.getName()).containsKey(name)) {
             for (Method m : type.getClass().getMethods()) {
-                InstMethod annotation = m.getAnnotation(InstMethod.class);
+                ElementMethod annotation = m.getAnnotation(ElementMethod.class);
                 if (annotation == null) continue;
                 if (annotation.name().equalsIgnoreCase(name) ||
                         ArrayUtils.contains(annotation.alias(), name)) {
@@ -48,7 +48,7 @@ public class TypeManager {
         public SBMethod(Method method, String... args) {
             this.method = method; this.argsHint = args;
         }
-        public SBInst<?> trigger(Parser parser, SBInst<?> object, EntrustInst... args) {
+        public SBElement<?> trigger(Parser parser, SBElement<?> object, EntrustInst... args) {
             // if args hint end with "..." then it means the method can accept any number of args
             // if args hint end with "?" then it means when the args is null, autofill the void args
             for (int i = 0; i < argsHint.length; i++) {
@@ -57,7 +57,7 @@ public class TypeManager {
                 if (hint.endsWith("?") || hint.endsWith("...")) {
                     if (length <= i) {
                         args = Arrays.copyOf(args, i + 1);
-                        args[i] = new EntrustInst(VoidInst.instance);
+                        args[i] = new EntrustInst(VoidElement.instance);
                     }
                 } else {
                     if (length <= i) {
@@ -69,7 +69,7 @@ public class TypeManager {
                 }
             }
             try {
-                return (SBInst<?>) method.invoke(object, parser, args);
+                return (SBElement<?>) method.invoke(object, parser, args);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;

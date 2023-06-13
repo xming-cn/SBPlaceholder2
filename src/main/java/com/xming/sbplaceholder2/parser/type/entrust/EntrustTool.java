@@ -1,6 +1,6 @@
 package com.xming.sbplaceholder2.parser.type.entrust;
 
-import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.inst.*;
 import com.xming.sbplaceholder2.parser.type.type.ExpressionType;
 import org.apache.commons.lang.math.NumberUtils;
@@ -12,13 +12,13 @@ public class EntrustTool {
         String trim = str.trim();
         ArrayList<String> actions = splitBy(trim, '.');
         EntrustInst entrust = new EntrustInst();
-        SBInst<?> object = getInstFromString(entrust, actions.remove(0));
+        SBElement<?> object = getInstFromString(entrust, actions.remove(0));
         entrust.setObject(object);
         if (actions.size() > 0) {
-            if (object instanceof IntInst intInst) {
+            if (object instanceof IntElement intInst) {
                 String digits = actions.get(0);
                 if (NumberUtils.isDigits(digits)) {
-                    entrust.setObject(new NumberInst(intInst.value + NumberUtils.toFloat("0." + digits)));
+                    entrust.setObject(new NumberElement(intInst.value + NumberUtils.toFloat("0." + digits)));
                     actions.remove(0);
                 }
             }
@@ -36,8 +36,8 @@ public class EntrustTool {
                 String[] strArgs = splitBy(action.substring(start + 1, end), ',').toArray(new String[0]);
                 EntrustInst[] args = new EntrustInst[strArgs.length];
                 for (int i = 0; i < strArgs.length; i++) {
-                    SBInst<?> inst = ExpressionType.inst.newInst(strArgs[i]);
-                    if (inst instanceof ExpressionInst)
+                    SBElement<?> inst = ExpressionType.inst.newInst(strArgs[i]);
+                    if (inst instanceof ExpressionElement)
                         args[i] = new EntrustInst(inst, new Task(Task.TaskType.SUB_EXPRESSION, null));
                     else args[i] = new EntrustInst(inst);
                 }
@@ -48,51 +48,51 @@ public class EntrustTool {
         }
         return entrust;
     }
-    public static SBInst<?> getInstFromString(EntrustInst entrust, String str) {
+    public static SBElement<?> getInstFromString(EntrustInst entrust, String str) {
         if (str.startsWith("(") && str.endsWith(")")) {
             String substring = str.substring(1, str.length() - 1);
-            SBInst<?> sbInst = ExpressionType.inst.newInst(substring);
-            if (sbInst instanceof ExpressionInst) {
+            SBElement<?> sbElement = ExpressionType.inst.newInst(substring);
+            if (sbElement instanceof ExpressionElement) {
                 entrust.addTask(new Task(Task.TaskType.SUB_EXPRESSION, null));
             }
-            return sbInst;
+            return sbElement;
         } else if (str.startsWith("\"") && str.endsWith("\"")) {
-            return new StringInst(str.substring(1, str.length() - 1));
+            return new StringElement(str.substring(1, str.length() - 1));
         } else if (str.startsWith("'") && str.endsWith("'")) {
-            return new StringInst(str.substring(1, str.length() - 1));
+            return new StringElement(str.substring(1, str.length() - 1));
         } else if (NumberUtils.isDigits(str)) {
-            return new IntInst(NumberUtils.toInt(str));
+            return new IntElement(NumberUtils.toInt(str));
         } else if (NumberUtils.isNumber(str)) {
             System.out.println(str + " is a number but not a digit");
-            return new NumberInst(NumberUtils.toFloat(str));
+            return new NumberElement(NumberUtils.toFloat(str));
         } else if (str.equals("void")) {
-            return VoidInst.instance;
+            return VoidElement.instance;
         } else if (str.equals("true")) {
-            return BoolInst.trueInstance;
+            return BoolElement.trueInstance;
         } else if (str.equals("false")) {
-            return BoolInst.falseInstance;
+            return BoolElement.falseInstance;
         } else if (str.endsWith(")")) {
-            int start = str.indexOf('(');
+            int start = findLast(str, '(');
             if (start != -1) {
                 String name = str.substring(0, start);
                 String[] strArgs = splitBy(str.substring(start + 1, str.length() - 1), ',').toArray(new String[0]);
                 EntrustInst[] args = new EntrustInst[strArgs.length];
                 for (int i = 0; i < strArgs.length; i++) {
-                    SBInst<?> inst = ExpressionType.inst.newInst(strArgs[i]);
-                    if (inst instanceof ExpressionInst)
+                    SBElement<?> inst = ExpressionType.inst.newInst(strArgs[i]);
+                    if (inst instanceof ExpressionElement)
                         args[i] = new EntrustInst(inst, new Task(Task.TaskType.SUB_EXPRESSION, null));
                     else args[i] = new EntrustInst(inst);
                 }
-                SBInst<?> instFromString = getInstFromString(entrust, name);
+                SBElement<?> instFromString = getInstFromString(entrust, name);
                 entrust.addTask(new Task(Task.TaskType.CALL_SELF, null, args));
                 return instFromString;
             } else {
                 entrust.addTask(new Task(Task.TaskType.PARSE_VARIABLE, null));
-                return new StringInst(str);
+                return new StringElement(str);
             }
         } else {
             entrust.addTask(new Task(Task.TaskType.PARSE_VARIABLE, null));
-            return new StringInst(str);
+            return new StringElement(str);
         }
     }
     public static ArrayList<String> splitBy(String str, Character separator) {
@@ -124,5 +124,27 @@ public class EntrustTool {
         }
         result.add(this_object.toString());
         return result;
+    }
+    public static int findLast(String str, Character t) {
+        Character state = null;
+        int depth = 0;
+        for (int i = str.length() - 1; i >= 0; i--) {
+            char c = str.charAt(i);
+            if (state == null) {
+                if (c == '(') depth++;
+                else if (c == ')') depth--;
+                if (depth > 0) continue;
+
+                if (c == '"') state = '"';
+                else if (c == '\'') state = '\'';
+
+                if (c == t) {
+                    return i;
+                }
+            } else {
+                if (c == state) state = null;
+            }
+        }
+        return -1;
     }
 }

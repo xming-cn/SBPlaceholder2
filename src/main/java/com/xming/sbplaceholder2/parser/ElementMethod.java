@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InstMethod {
+public @interface ElementMethod {
     String name();
     String[] alias() default {};
     String[] args() default {};

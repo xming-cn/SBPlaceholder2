@@ -1,12 +1,13 @@
 package com.xming.sbplaceholder2.parser.type.type;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
-import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBType;
-import com.xming.sbplaceholder2.parser.type.inst.VoidInst;
+import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
+import com.xming.sbplaceholder2.parser.type.inst.VoidElement;
 import org.bukkit.plugin.Plugin;
 
-public class VoidType extends SBType<VoidInst> {
+public class VoidType extends SBType<VoidElement> {
     public static VoidType inst = new VoidType();
     private VoidType() {}
 
@@ -19,7 +20,7 @@ public class VoidType extends SBType<VoidInst> {
         return "Bool";
     }
     @Override
-    public VoidInst newInst(SBInst<?>... insts) {
-        return VoidInst.instance;
+    public VoidElement newInst(Parser parser, EntrustInst... insts) {
+        return VoidElement.instance;
     }
 }

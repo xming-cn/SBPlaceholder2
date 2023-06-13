@@ -2,7 +2,7 @@ package com.xming.sbplaceholder2.parser.type.inst;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.Parser;
-import com.xming.sbplaceholder2.parser.type.SBInst;
+import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.SBType;
 import com.xming.sbplaceholder2.parser.type.TypeManager;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
@@ -10,14 +10,12 @@ import com.xming.sbplaceholder2.parser.type.type.TypeType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-
-public class TypeInst extends SBInst<TypeType> {
+public class TypeElement extends SBElement<TypeType> {
     SBType<?> value;
-    public TypeInst(@NotNull SBType<?> value) {
+    public TypeElement(@NotNull SBType<?> value) {
         this.value = value;
     }
-    public TypeInst(String value) {
+    public TypeElement(String value) {
         this.value = TypeManager.getInstance().getType(value);
     }
     @Override
@@ -34,13 +32,11 @@ public class TypeInst extends SBInst<TypeType> {
     }
     @Override
     public Object clone() {
-        return new TypeInst(value);
+        return new TypeElement(value);
     }
     @Override
-    public SBInst<?> symbol_call(Parser parser, EntrustInst... args) {
-        return value.newInst(Arrays.stream(args)
-                .map(it -> it.execute(parser, parser.getPlayer().value))
-                .toArray(SBInst<?>[]::new));
+    public SBElement<?> symbol_call(Parser parser, EntrustInst... args) {
+        return value.newInst(parser, args);
     }
     @Override
     public int hashCode() {
@@ -48,6 +44,6 @@ public class TypeInst extends SBInst<TypeType> {
     }
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof TypeInst typeInst && typeInst.value.equals(value);
+        return obj instanceof TypeElement typeInst && typeInst.value.equals(value);
     }
 }
