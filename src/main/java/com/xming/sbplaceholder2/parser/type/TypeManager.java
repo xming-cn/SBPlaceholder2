@@ -1,5 +1,6 @@
 package com.xming.sbplaceholder2.parser.type;
 
+import com.google.common.base.Joiner;
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.ElementMethod;
 import com.xming.sbplaceholder2.parser.Parser;
@@ -9,6 +10,9 @@ import com.xming.sbplaceholder2.parser.type.type.*;
 import org.apache.commons.lang.ArrayUtils;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
@@ -23,30 +27,47 @@ public class TypeManager {
     }
     private TypeManager() {}
     final HashMap<String, SBType<?>> types = new HashMap<>();
-    final HashMap<String, HashMap<String, SBMethod>> method = new HashMap<>();
+    final HashMap<String, ArrayList<SBMethod>> method = new HashMap<>();
     public void register(String key, SBType<?> type) {
+        method.computeIfAbsent(type.getName(), k -> new ArrayList<>());
+        ParameterizedType genericSuperclass = (ParameterizedType) type.getClass().getGenericSuperclass();
+        for (Type elementType : genericSuperclass.getActualTypeArguments()) {
+            Class<?> element;
+            if (elementType instanceof ParameterizedType) {
+                element = (Class<?>) ((ParameterizedType) elementType).getRawType();
+            } else {
+                element = (Class<?>) elementType;
+            }
+            for (Method m : element.getMethods()) {
+                ElementMethod annotation = m.getAnnotation(ElementMethod.class);
+                if (annotation == null) continue;
+                System.out.println("register method " + annotation.name() + " for " + type.getName());
+                method.get(type.getName()).add(new SBMethod(annotation.name(), annotation.alias(), m, annotation.args()));
+            }
+        }
         types.put(key, type);
     }
     public SBMethod getMethod(SBElement<?> type, String name) {
-        method.computeIfAbsent(type.getName(), k -> new HashMap<>());
-        if (!method.get(type.getName()).containsKey(name)) {
-            for (Method m : type.getClass().getMethods()) {
-                ElementMethod annotation = m.getAnnotation(ElementMethod.class);
-                if (annotation == null) continue;
-                if (annotation.name().equalsIgnoreCase(name) ||
-                        ArrayUtils.contains(annotation.alias(), name)) {
-                    method.get(type.getName()).put(name, new SBMethod(m, annotation.args()));
-                    break;
-                }
+        ArrayList<SBMethod> methods = method.get(type.getName());
+        for (SBMethod method : methods) {
+            if (method.name.equals(name)) {
+                return method;
+            } else if (ArrayUtils.contains(method.alias, name)) {
+                return method;
             }
         }
-        return method.get(type.getName()).get(name);
+        return null;
     }
     public static class SBMethod {
+        private final String name;
+        private final String[] alias;
         private final Method method;
         private final String[] argsHint;
-        public SBMethod(Method method, String... args) {
-            this.method = method; this.argsHint = args;
+        public SBMethod(String name, String[] alias, Method method, String... args) {
+            this.name = name;
+            this.alias = alias;
+            this.method = method;
+            this.argsHint = args;
         }
         public SBElement<?> trigger(Parser parser, SBElement<?> object, EntrustInst... args) {
             // if args hint end with "..." then it means the method can accept any number of args
@@ -107,7 +128,20 @@ public class TypeManager {
         return types.keySet();
     }
     public String getInfo(String type) {
-//        SBType<?> sbType = types.get(type);
-        return "";
+        SBType<?> sbType = types.get(type);
+        StringBuilder result = new StringBuilder("§aType: " + type + " §7from " + sbType.getPlugin().getName() + "\n");
+        result.append("§7").append(sbType.getDescription()).append("\n");
+        result.append("§fMethods: §7\n");
+        ArrayList<SBMethod> methods = this.method.get(type);
+        for (SBMethod method : methods) {
+            result.append("§7• §f").append(type).append(".").append(method.name).append("§f(")
+                    .append(Joiner.on(", ").join(method.argsHint)).append(")\n");
+            if (method.alias == null) continue;
+            if (method.alias.length > 0) {
+                result.append("§7  §fAlias: §7").append(Joiner.on(", ").join(method.alias)).append("\n");
+            }
+
+        }
+        return result.toString();
     }
 }

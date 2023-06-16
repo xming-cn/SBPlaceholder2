@@ -20,6 +20,11 @@ public class TypeType extends SBType<TypeElement> {
         return "Type";
     }
 
+    @Override
+    public String getDescription() {
+        return "类型, 用于构造其他类型。";
+    }
+
     public TypeElement newInst(String name) {
         return new TypeElement(name);
     }

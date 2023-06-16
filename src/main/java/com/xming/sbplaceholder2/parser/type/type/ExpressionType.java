@@ -23,27 +23,33 @@ public class ExpressionType extends SBType<SBElement<?>> {
     public String getName() {
         return "Expression";
 }
-    public SBElement<?> newInst(String string) {
-//        while (string.startsWith("(") && string.endsWith(")")) {
-//            string = string.substring(1, string.length() - 1);
-//        }
 
+    @Override
+    public String getDescription() {
+        return "用于存储表达式。";
+    }
+
+    public SBElement<?> newInst(String string, Boolean cache) {
         if (string.isEmpty()) addCache(string, new StringElement(""));
         else if (NumberUtils.isDigits(string)) addCache(string, new IntElement(Integer.parseInt(string)));
         else if (NumberUtils.isNumber(string)) addCache(string, new NumberElement(Float.parseFloat(string)));
         else if (string.equals("void")) addCache(string, VoidElement.instance);
         else if (string.equals("true") || string.equals("false")) addCache(string, BoolElement.fromBool(string.equalsIgnoreCase("true")));
 
-        if (!cache.containsKey(string)) {
-            ExpressionElement value = new ExpressionElement(string);
-            addCache(string, value);
-        }
+        if (cache) {
+            if (!ExpressionType.cache.containsKey(string)) {
+                ExpressionElement value = new ExpressionElement(string);
+                addCache(string, value);
+            }
 
-        try {
-            return (SBElement<?>) cache.get(string).clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-            return null;
+            try {
+                return (SBElement<?>) ExpressionType.cache.get(string).clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            return new ExpressionElement(string);
         }
     }
 
@@ -53,6 +59,6 @@ public class ExpressionType extends SBType<SBElement<?>> {
     }
     @Override
     public SBElement<?> newInst(Parser parser, EntrustInst... insts) {
-        return newInst(insts[0].execute(parser).asString().value);
+        return newInst(insts[0].execute(parser).asString().value, true);
     }
 }

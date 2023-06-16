@@ -33,21 +33,24 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                 );
             }
             case "type" -> {
-                sender.sendMessage(TypeManager.getInstance().getInfo(args[1]));
+                String info = TypeManager.getInstance().getInfo(args[1]);
+                for (String s : info.split("\n")) {
+                    sender.sendMessage(s);
+                }
             }
             case "types" -> {
                 Set<String> types = TypeManager.getInstance().getTypes();
                 sender.sendMessage("§fTypes(§9" + types.size() + "§f): §a" + Joiner.on("§7, §a").join(types));
             }
             case "global" -> {
-                if (Parser.global_variables == null) {
+                if (Parser.getGlobal_variables() == null) {
                     Parser.loadGlobalVariables();
                 }
-                sender.sendMessage("§fGlobal Variables(§9" + Parser.global_variables.size() + "§f): §a"
-                        + Joiner.on("§7, §a").join(Parser.global_variables.keySet()));
+                sender.sendMessage("§fGlobal Variables(§9" + Parser.getGlobal_variables().size() + "§f): §a"
+                        + Joiner.on("§7, §a").join(Parser.getGlobal_variables().keySet()));
             }
             case "reload" -> {
-                Parser.global_variables.clear();
+                Parser.getGlobal_variables().clear();
                 Parser.loadGlobalVariables();
                 sender.sendMessage("§aReload Success!");
             }
@@ -65,7 +68,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
             case 2 -> {
                 switch (args[0]) {
                     case "type" -> {
-                        return (List<String>) TypeManager.getInstance().getTypes();
+                        return TypeManager.getInstance().getTypes().stream().toList();
                     }
                     case "test" -> {
                         return List.of("expression");

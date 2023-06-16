@@ -21,6 +21,12 @@ public class FunctionType extends SBType<FunctionElement> {
     public String getName() {
         return "Function";
     }
+
+    @Override
+    public String getDescription() {
+        return "函数, 用于存储一段代码。";
+    }
+
     @Override
     public FunctionElement newInst(Parser parser, EntrustInst... insts) {
         ArrayList<String> args = new ArrayList<>();

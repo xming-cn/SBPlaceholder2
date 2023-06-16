@@ -36,7 +36,7 @@ public class EntrustTool {
                 String[] strArgs = splitBy(action.substring(start + 1, end), ',').toArray(new String[0]);
                 EntrustInst[] args = new EntrustInst[strArgs.length];
                 for (int i = 0; i < strArgs.length; i++) {
-                    SBElement<?> inst = ExpressionType.inst.newInst(strArgs[i]);
+                    SBElement<?> inst = ExpressionType.inst.newInst(strArgs[i], false);
                     if (inst instanceof ExpressionElement)
                         args[i] = new EntrustInst(inst, new Task(Task.TaskType.SUB_EXPRESSION, null));
                     else args[i] = new EntrustInst(inst);
@@ -51,7 +51,7 @@ public class EntrustTool {
     public static SBElement<?> getInstFromString(EntrustInst entrust, String str) {
         if (str.startsWith("(") && str.endsWith(")")) {
             String substring = str.substring(1, str.length() - 1);
-            SBElement<?> sbElement = ExpressionType.inst.newInst(substring);
+            SBElement<?> sbElement = ExpressionType.inst.newInst(substring, false);
             if (sbElement instanceof ExpressionElement) {
                 entrust.addTask(new Task(Task.TaskType.SUB_EXPRESSION, null));
             }
@@ -78,7 +78,7 @@ public class EntrustTool {
                 String[] strArgs = splitBy(str.substring(start + 1, str.length() - 1), ',').toArray(new String[0]);
                 EntrustInst[] args = new EntrustInst[strArgs.length];
                 for (int i = 0; i < strArgs.length; i++) {
-                    SBElement<?> inst = ExpressionType.inst.newInst(strArgs[i]);
+                    SBElement<?> inst = ExpressionType.inst.newInst(strArgs[i], false);
                     if (inst instanceof ExpressionElement)
                         args[i] = new EntrustInst(inst, new Task(Task.TaskType.SUB_EXPRESSION, null));
                     else args[i] = new EntrustInst(inst);

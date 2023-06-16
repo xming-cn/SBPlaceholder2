@@ -18,6 +18,12 @@ public class IntType extends SBType<IntElement> {
     public String getName() {
         return "Int";
     }
+
+    @Override
+    public String getDescription() {
+        return "整数, 用于计算。";
+    }
+
     @Override
     public IntElement newInst(Parser parser, EntrustInst... insts) {
         return insts[0].execute(parser).asInt();

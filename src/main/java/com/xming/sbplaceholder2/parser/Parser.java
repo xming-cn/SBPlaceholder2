@@ -16,7 +16,7 @@ public class Parser {
     private HashMap<String, SBElement<?>> variables;
     public final int debug;
     public int depth;
-    static public HashMap<String, SBElement<?>> global_variables = null;
+    static private HashMap<String, SBElement<?>> global_variables = null;
 
     public static void loadGlobalVariables() {
         global_variables = new HashMap<>();
@@ -52,7 +52,7 @@ public class Parser {
         this.raw_expression = str;
         this.debug = debug;
         if (variables == null) this.variables = new HashMap<>();
-        expression = ExpressionType.inst.newInst(raw_expression);
+        expression = ExpressionType.inst.newInst(raw_expression, true);
     }
     public Parser(String str, @Nullable HashMap<String, SBElement<?>> variables) {
         this(str, variables, -1);
@@ -83,5 +83,8 @@ public class Parser {
     }
     public PlayerElement getPlayer() {
         return (PlayerElement) variables.get("player");
+    }
+    public static HashMap<String, SBElement<?>> getGlobal_variables() {
+        return global_variables;
     }
 }

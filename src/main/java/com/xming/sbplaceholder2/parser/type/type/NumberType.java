@@ -18,6 +18,12 @@ public class NumberType extends SBType<NumberElement> {
     public String getName() {
         return "Number";
     }
+
+    @Override
+    public String getDescription() {
+        return "数字, 比整数更精确的计算。";
+    }
+
     @Override
     public NumberElement newInst(Parser parser, EntrustInst... insts) {
         return insts[0].execute(parser).asNumber();

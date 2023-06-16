@@ -18,6 +18,12 @@ public class BoolType extends SBType<BoolElement> {
     public String getName() {
         return "Bool";
     }
+
+    @Override
+    public String getDescription() {
+        return "布尔值, 逻辑运算的基础。";
+    }
+
     @Override
     public BoolElement newInst(Parser parser, EntrustInst... insts) {
         return insts[0].execute(parser).asBool();

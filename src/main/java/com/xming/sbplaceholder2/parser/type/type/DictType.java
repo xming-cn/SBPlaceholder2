@@ -21,6 +21,12 @@ public class DictType extends SBType<DictElement> {
     public String getName() {
         return "Dict";
     }
+
+    @Override
+    public String getDescription() {
+        return "字典, 用于存储键值对。";
+    }
+
     @Override
     public DictElement newInst(Parser parser, EntrustInst... insts) {
         return new DictElement(Arrays.stream(insts)

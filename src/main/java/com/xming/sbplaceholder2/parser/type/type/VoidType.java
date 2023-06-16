@@ -17,8 +17,14 @@ public class VoidType extends SBType<VoidElement> {
     }
     @Override
     public String getName() {
-        return "Bool";
+        return "Void";
     }
+
+    @Override
+    public String getDescription() {
+        return "吞噬一切的虚空。";
+    }
+
     @Override
     public VoidElement newInst(Parser parser, EntrustInst... insts) {
         return VoidElement.instance;

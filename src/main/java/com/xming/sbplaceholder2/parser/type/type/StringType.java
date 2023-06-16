@@ -18,6 +18,12 @@ public class StringType extends SBType<StringElement> {
     public String getName() {
         return "String";
     }
+
+    @Override
+    public String getDescription() {
+        return "字符串, 用于显示。";
+    }
+
     @Override
     public StringElement newInst(Parser parser, EntrustInst... insts) {
         return insts[0].execute(parser).asString();

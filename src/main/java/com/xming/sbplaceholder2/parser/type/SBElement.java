@@ -91,7 +91,7 @@ public abstract class SBElement<T extends SBType<?>> implements TypeInstanceOf<T
             throw new CloneNotSupportedException("Clone not supported");
         }
     }
-    @ElementMethod(name = "?", alias = {"ifVoid"}, args = {"Any"})
+    @ElementMethod(name = "ifVoid", alias = {"?"}, args = {"Any"})
     public SBElement<?> method_ifVoid(Parser parser, EntrustInst... args) {
         if (this.equals(VoidElement.instance)) {
             return args[0].execute(parser);

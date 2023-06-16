@@ -21,6 +21,12 @@ public class ListType extends SBType<ListElement> {
     public String getName() {
         return "List";
     }
+
+    @Override
+    public String getDescription() {
+        return "列表, 用于存储多个元素。";
+    }
+
     @Override
     public ListElement newInst(Parser parser, EntrustInst... insts) {
         return new ListElement(Arrays.stream(insts)

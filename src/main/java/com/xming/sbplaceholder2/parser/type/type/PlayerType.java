@@ -24,6 +24,11 @@ public class PlayerType extends SBType<PlayerElement> {
     }
 
     @Override
+    public String getDescription() {
+        return "玩家, 用于获取玩家的信息。";
+    }
+
+    @Override
     public PlayerElement newInst(Parser parser, EntrustInst... insts) {
         String name = insts[0].execute(parser).asString().value;
         Player player = Bukkit.getPlayer(name);

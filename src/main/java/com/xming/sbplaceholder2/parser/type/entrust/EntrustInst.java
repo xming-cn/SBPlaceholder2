@@ -54,6 +54,9 @@ public class EntrustInst implements Cloneable {
                 case CALL_SELF -> object.symbol_call(parser, task.args());
                 case CALL_METHOD -> {
                     TypeManager.SBMethod method = TypeManager.getInstance().getMethod(object, task.name());
+                    if (method == null) {
+                        throw new RuntimeException("Method not found: " + task.name());
+                    }
                     yield method.trigger(parser, object, task.args());
                 }
                 case GET_FIELD -> object.symbol_getField(parser, task.name());
@@ -62,8 +65,8 @@ public class EntrustInst implements Cloneable {
                     if (object instanceof StringElement inst) {
                         if (parser.getVariables().containsKey(inst.value)) {
                             yield parser.getVariables().get(inst.value);
-                        } else if (parser.global_variables.containsKey(inst.value)) {
-                            yield parser.global_variables.get(inst.value);
+                        } else if (parser.getGlobal_variables().containsKey(inst.value)) {
+                            yield parser.getGlobal_variables().get(inst.value);
                         } else if (inst.value.startsWith("{") && inst.value.endsWith("}")) {
                             yield new StringElement(PlaceholderAPI.setPlaceholders(
                                     player, "%" + inst.value.substring(1, inst.value.length() - 1) + "%"));
