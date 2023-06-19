@@ -1,5 +1,6 @@
 package com.xming.sbplaceholder2.parser;
 
+import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.event.GlobalVariablesLoadEvent;
 import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.inst.*;
@@ -49,20 +50,35 @@ public class Parser {
     }
 
     public Parser(String str, @Nullable HashMap<String, SBElement<?>> variables, int debug) {
-        this.raw_expression = str;
         this.debug = debug;
+        long startTime = System.currentTimeMillis();
+        if (debug >= 0) {
+            SBPlaceholder2.logger.info("Parser build: " + str);
+            SBPlaceholder2.logger.info("debug level: " + debug);
+        }
+        this.raw_expression = str;
         if (variables == null) this.variables = new HashMap<>();
         expression = ExpressionType.inst.newInst(raw_expression, true);
+        if (debug >= 0) {
+            SBPlaceholder2.logger.info("Parser build success in " + (System.currentTimeMillis() - startTime) + "ms");
+        }
     }
     public Parser(String str, @Nullable HashMap<String, SBElement<?>> variables) {
         this(str, variables, -1);
     }
     public SBElement<?> parse(OfflinePlayer player) {
+        long startTime = System.currentTimeMillis();
+        if (this.debug >= 0) {
+            SBPlaceholder2.logger.info("Parser parse: " + raw_expression);
+        }
         if (global_variables == null) loadGlobalVariables();
         variables.put("player", new PlayerElement(player));
 
         if (expression instanceof ExpressionElement expressionInst) {
             expression = expressionInst.parse(this);
+        }
+        if (this.debug >= 0) {
+            SBPlaceholder2.logger.info("Parser parse success in " + (System.currentTimeMillis() - startTime) + "ms");
         }
         return expression.asString();
     }

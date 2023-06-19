@@ -2,12 +2,14 @@ package com.xming.sbplaceholder2.parser.type;
 
 import com.google.common.base.Joiner;
 import com.xming.sbplaceholder2.SBPlaceholder2;
+import com.xming.sbplaceholder2.event.TypeLoadEvent;
 import com.xming.sbplaceholder2.parser.ElementMethod;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
 import com.xming.sbplaceholder2.parser.type.inst.VoidElement;
 import com.xming.sbplaceholder2.parser.type.type.*;
 import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.Bukkit;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -45,7 +47,9 @@ public class TypeManager {
                 method.get(type.getName()).add(new SBMethod(annotation.name(), annotation.alias(), m, annotation.args()));
             }
         }
-        types.put(key, type);
+        TypeLoadEvent event = new TypeLoadEvent(type);
+        Bukkit.getPluginManager().callEvent(event);
+        if (!event.isCancelled()) types.put(key, type);
     }
     public SBMethod getMethod(SBElement<?> type, String name) {
         ArrayList<SBMethod> methods = method.get(type.getName());
@@ -58,6 +62,12 @@ public class TypeManager {
         }
         return null;
     }
+
+    public void expand(SBType<?> sbType, String name, String[] alias, Method method, String[] args) {
+        this.method.computeIfAbsent(sbType.getName(), k -> new ArrayList<>());
+        this.method.get(sbType.getName()).add(new SBMethod(name, alias, method, args));
+    }
+
     public static class SBMethod {
         private final String name;
         private final String[] alias;

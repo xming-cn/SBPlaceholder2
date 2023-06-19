@@ -1,6 +1,7 @@
 package com.xming.sbplaceholder2;
 
 import com.xming.sbplaceholder2.command.MainCommand;
+import com.xming.sbplaceholder2.event.SBPlaceholderLoadEvent;
 import com.xming.sbplaceholder2.parser.type.TypeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -24,6 +25,7 @@ public final class SBPlaceholder2 extends JavaPlugin {
 
         Objects.requireNonNull(Bukkit.getPluginCommand("sbplaceholder")).setExecutor(new MainCommand());
         TypeManager.getInstance().loadBuiltInTypes();
+        Bukkit.getPluginManager().callEvent(new SBPlaceholderLoadEvent());
     }
 
     @Override
