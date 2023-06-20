@@ -43,7 +43,6 @@ public class TypeManager {
             for (Method m : element.getMethods()) {
                 ElementMethod annotation = m.getAnnotation(ElementMethod.class);
                 if (annotation == null) continue;
-                System.out.println("register method " + annotation.name() + " for " + type.getName());
                 method.get(type.getName()).add(new SBMethod(annotation.name(), annotation.alias(), m, annotation.args()));
             }
         }
@@ -79,6 +78,7 @@ public class TypeManager {
             this.method = method;
             this.argsHint = args;
         }
+
         public SBElement<?> trigger(Parser parser, SBElement<?> object, EntrustInst... args) {
             // if args hint end with "..." then it means the method can accept any number of args
             // if args hint end with "?" then it means when the args is null, autofill the void args
