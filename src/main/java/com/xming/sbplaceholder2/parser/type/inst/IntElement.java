@@ -40,38 +40,31 @@ public class IntElement extends SBElement<IntType> {
     }
     @Override
     public IntElement symbol_add(SBElement<?> other) {
-        IntElement otherInt = other instanceof IntElement intInst ? intInst : other.asInt();
-        return new IntElement(value + otherInt.value);
+        return new IntElement(value + other.asInt().value);
     }
     @Override
     public IntElement symbol_sub(SBElement<?> other) {
-        IntElement otherInt = other instanceof IntElement intInst ? intInst : other.asInt();
-        return new IntElement(value - otherInt.value);
+        return new IntElement(value - other.asInt().value);
     }
     @Override
     public IntElement symbol_mul(SBElement<?> other) {
-        IntElement otherInt = other instanceof IntElement intInst ? intInst : other.asInt();
-        return new IntElement(value * otherInt.value);
+        return new IntElement(value * other.asInt().value);
     }
     @Override
     public NumberElement symbol_div(SBElement<?> other) {
-        IntElement otherInt = other instanceof IntElement intInst ? intInst : other.asInt();
-        return new NumberElement(((float)value) / otherInt.value);
+        return new NumberElement(((float)value) / other.asInt().value);
     }
     @Override
     public IntElement symbol_double_div(SBElement<?> other) {
-        IntElement otherInt = other instanceof IntElement intInst ? intInst : other.asInt();
-        return new IntElement(value / otherInt.value);
+        return new IntElement(value / other.asInt().value);
     }
     @Override
     public NumberElement symbol_double_mul(SBElement<?> other) {
-        IntElement otherInt = other instanceof IntElement intInst ? intInst : other.asInt();
-        return new NumberElement((float)Math.pow((double)value, (double)otherInt.value));
+        return new NumberElement((float)Math.pow((double)value, other.asNumber().value));
     }
     @Override
     public Integer symbol_compare(SBElement<?> other) {
-        IntElement otherInt = other instanceof IntElement intInst ? intInst : other.asInt();
-        return value.compareTo(otherInt.value);
+        return value.compareTo(other.asInt().value);
     }
     @ElementMethod(name = "abs", returnType = "Int")
     public SBElement<?> method_abs(Parser parser, EntrustInst... args) {

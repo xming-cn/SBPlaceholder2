@@ -45,38 +45,31 @@ public class NumberElement extends SBElement<NumberType> {
     }
     @Override
     public NumberElement symbol_add(SBElement<?> other) {
-        NumberElement otherNumber = other instanceof NumberElement numberInst ? numberInst : other.asNumber();
-        return new NumberElement(value + otherNumber.value);
+        return new NumberElement(value + other.asNumber().value);
     }
     @Override
     public NumberElement symbol_sub(SBElement<?> other) {
-        NumberElement otherNumber = other instanceof NumberElement numberInst ? numberInst : other.asNumber();
-        return new NumberElement(value - otherNumber.value);
+        return new NumberElement(value - other.asNumber().value);
     }
     @Override
     public NumberElement symbol_mul(SBElement<?> other) {
-        NumberElement otherNumber = other instanceof NumberElement numberInst ? numberInst : other.asNumber();
-        return new NumberElement(value * otherNumber.value);
+        return new NumberElement(value * other.asNumber().value);
     }
     @Override
     public NumberElement symbol_div(SBElement<?> other) {
-        NumberElement otherNumber = other instanceof NumberElement numberInst ? numberInst : other.asNumber();
-        return new NumberElement(value / otherNumber.value);
+        return new NumberElement(value / other.asNumber().value);
     }
     @Override
     public NumberElement symbol_double_div(SBElement<?> other) {
-        NumberElement otherNumber = other instanceof NumberElement numberInst ? numberInst : other.asNumber();
-        return new NumberElement((float)(int)(value / otherNumber.value));
+        return new NumberElement((float)(int)(value / other.asNumber().value));
     }
     @Override
     public NumberElement symbol_double_mul(SBElement<?> other) {
-        IntElement otherInt = other instanceof IntElement intInst ? intInst : other.asInt();
-        return new NumberElement((float)Math.pow(value, otherInt.value));
+        return new NumberElement((float)Math.pow(value, other.asNumber().value));
     }
     @Override
     public Integer symbol_compare(SBElement<?> other) {
-        NumberElement otherNumber = other instanceof NumberElement numberInst ? numberInst : other.asNumber();
-        return value.compareTo(otherNumber.value);
+        return value.compareTo(other.asNumber().value);
     }
     @ElementMethod(name = "round", returnType = "Int")
     public IntElement method_round(Parser parser, EntrustInst... args) {

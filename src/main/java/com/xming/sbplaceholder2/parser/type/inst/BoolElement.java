@@ -37,13 +37,11 @@ public class BoolElement extends SBElement<BoolType> {
     }
     @Override
     public BoolElement symbol_and(SBElement<?> other) {
-        BoolElement otherBool = other instanceof BoolElement boolInst ? boolInst : other.asBool();
-        return fromBool(toBool() && otherBool.toBool());
+        return fromBool(toBool() && other.asBool().toBool());
     }
     @Override
     public BoolElement symbol_or(SBElement<?> other) {
-        BoolElement otherBool = other instanceof BoolElement boolInst ? boolInst : other.asBool();
-        return fromBool(toBool() || otherBool.toBool());
+        return fromBool(toBool() || other.asBool().toBool());
     }
     @Override
     public BoolElement symbol_not() {

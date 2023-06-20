@@ -62,20 +62,17 @@ public class StringElement extends SBElement<StringType> {
 
     @Override
     public StringElement symbol_add(SBElement<?> other) {
-        StringElement otherString = other instanceof StringElement stringInst ? stringInst : other.asString();
-        return new StringElement(value + otherString.value);
+        return new StringElement(value + other.asString().value);
     }
 
     @Override
     public StringElement symbol_mul(SBElement<?> other) {
-        IntElement otherInt = other instanceof IntElement intInst ? intInst : other.asInt();
-        return new StringElement(value.repeat(otherInt.value));
+        return new StringElement(value.repeat(other.asInt().value));
     }
 
     @Override
     public Integer symbol_compare(SBElement<?> other) {
-        StringElement otherString = other instanceof StringElement stringInst ? stringInst : other.asString();
-        return value.compareTo(otherString.value);
+        return value.compareTo(other.asString().value);
     }
 
     @Override
@@ -91,12 +88,7 @@ public class StringElement extends SBElement<StringType> {
     }
     @ElementMethod(name = "papi", args = {"Player?"}, returnType = "String")
     public StringElement method_papi(Parser parser, EntrustInst[] args) {
-        OfflinePlayer p;
-        if (args[0].execute(parser) instanceof PlayerElement target) {
-            p = target.value;
-        } else {
-            p = parser.getPlayer().value;
-        }
+        OfflinePlayer p = args[0].execute(parser) instanceof PlayerElement target ? target.value : parser.getPlayer().value;
         return new StringElement(PlaceholderAPI.setPlaceholders(p, "%" + value + "%"));
     }
     @ElementMethod(name = "color", args = {"String?"}, returnType = "String")
