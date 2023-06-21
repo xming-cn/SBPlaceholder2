@@ -52,7 +52,7 @@ public class StringElement extends SBElement<StringType> {
 
     @Override
     public NumberElement asNumber() {
-        return new NumberElement(Float.parseFloat(value));
+        return new NumberElement(Double.parseDouble(value));
     }
 
     @Override

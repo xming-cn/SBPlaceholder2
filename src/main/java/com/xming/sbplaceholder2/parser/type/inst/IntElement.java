@@ -38,7 +38,7 @@ public class IntElement extends SBElement<IntType> {
 
     @Override
     public NumberElement asNumber() {
-        return new NumberElement(value.floatValue());
+        return new NumberElement(value.doubleValue());
     }
 
     @Override
@@ -58,7 +58,7 @@ public class IntElement extends SBElement<IntType> {
 
     @Override
     public NumberElement symbol_div(SBElement<?> other) {
-        return new NumberElement(((float)value) / other.asInt().value);
+        return new NumberElement(((double)value) / other.asInt().value);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class IntElement extends SBElement<IntType> {
 
     @Override
     public NumberElement symbol_double_mul(SBElement<?> other) {
-        return new NumberElement((float)Math.pow((double)value, other.asNumber().value));
+        return new NumberElement(Math.pow((double)value, other.asNumber().value));
     }
 
     @Override

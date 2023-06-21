@@ -22,7 +22,7 @@ public class Parser {
     public static void loadGlobalVariables() {
         global_variables = new HashMap<>();
         global_variables.put("debug", new FunctionElement((SBElement<?>[] inst) -> new StringElement(inst[0].toDebug())));
-        global_variables.put("random", new FunctionElement((SBElement<?>[] inst) -> new NumberElement((float) Math.random())));
+        global_variables.put("random", new FunctionElement((SBElement<?>[] inst) -> new NumberElement(Math.random())));
         global_variables.put("getAuthor", new FunctionElement((SBElement<?>[] inst) -> new StringElement("xming_jun")));
         global_variables.put("if", new FunctionElement((SBElement<?>[] inst) -> inst[0].asBool().toBool() ? inst[1] : inst[2]));
         global_variables.put("range", new FunctionElement((SBElement<?>[] inst) -> {

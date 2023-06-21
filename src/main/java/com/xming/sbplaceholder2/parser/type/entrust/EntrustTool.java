@@ -18,7 +18,7 @@ public class EntrustTool {
             if (object instanceof IntElement intInst) {
                 String digits = actions.get(0);
                 if (NumberUtils.isDigits(digits)) {
-                    entrust.setObject(new NumberElement(intInst.value + NumberUtils.toFloat("0." + digits)));
+                    entrust.setObject(new NumberElement(intInst.value + NumberUtils.toDouble("0." + digits)));
                     actions.remove(0);
                 }
             }
@@ -64,7 +64,7 @@ public class EntrustTool {
             return new IntElement(NumberUtils.toInt(str));
         } else if (NumberUtils.isNumber(str)) {
             System.out.println(str + " is a number but not a digit");
-            return new NumberElement(NumberUtils.toFloat(str));
+            return new NumberElement(NumberUtils.toDouble(str));
         } else if (str.equals("void")) {
             return VoidElement.instance;
         } else if (str.equals("true")) {

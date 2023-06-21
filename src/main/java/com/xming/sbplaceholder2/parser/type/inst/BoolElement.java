@@ -33,7 +33,7 @@ public class BoolElement extends SBElement<BoolType> {
     }
     @Override
     public NumberElement asNumber() {
-        return new NumberElement(toBool() ? 1f : 0f);
+        return new NumberElement(toBool() ? 1d : 0d);
     }
     @Override
     public BoolElement symbol_and(SBElement<?> other) {
