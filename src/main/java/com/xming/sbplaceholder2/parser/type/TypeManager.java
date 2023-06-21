@@ -62,21 +62,44 @@ public class TypeManager {
         return null;
     }
 
-    public void expand(SBType<?> sbType, String name, String[] alias, Method method, String[] args) {
-        this.method.computeIfAbsent(sbType.getName(), k -> new ArrayList<>());
-        this.method.get(sbType.getName()).add(new SBMethod(name, alias, method, args));
+    public void expand(String type, String name, String[] alias, ExpandMethod method, String[] args) {
+        this.method.computeIfAbsent(type, k -> new ArrayList<>());
+        this.method.get(type).add(new SBMethod(name, alias, method, args));
     }
 
     public static class SBMethod {
         private final String name;
         private final String[] alias;
         private final Method method;
+        private final ExpandMethod expandMethod;
         private final String[] argsHint;
         public SBMethod(String name, String[] alias, Method method, String... args) {
             this.name = name;
             this.alias = alias;
             this.method = method;
+            this.expandMethod = null;
             this.argsHint = args;
+        }
+
+        public SBMethod(String name, String[] alias, ExpandMethod method, String... args) {
+            this.name = name;
+            this.alias = alias;
+            this.method = null;
+            this.expandMethod = method;
+            this.argsHint = args;
+        }
+        public SBElement<?> run(Parser parser, SBElement<?> object, EntrustInst... args) {
+            if (method != null) {
+                try {
+                    return (SBElement<?>) method.invoke(object, parser, args);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            } else {
+                assert expandMethod != null;
+                return expandMethod.run(parser, object, args);
+            }
         }
 
         public SBElement<?> trigger(Parser parser, SBElement<?> object, EntrustInst... args) {
@@ -93,18 +116,13 @@ public class TypeManager {
                 } else {
                     if (length <= i) {
                         SBPlaceholder2.logger.warning("error args!");
-                        SBPlaceholder2.logger.warning("object " + object.toDebug() + " call method " + method.getName());
+                        SBPlaceholder2.logger.warning("object " + object.toDebug() + " call method " + name);
                         SBPlaceholder2.logger.warning("hint is " + hint + " but args length is " + length);
                         return null;
                     }
                 }
             }
-            try {
-                return (SBElement<?>) method.invoke(object, parser, args);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
+            return run(parser, object, args);
         }
     }
     public void unregister(String key) {
