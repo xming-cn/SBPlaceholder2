@@ -101,7 +101,7 @@ public class EntrustInst implements Cloneable {
                             }
                         }
                         break;
-                };
+                }
             } catch (Exception e) {
                 object = VoidElement.instance;
             }
