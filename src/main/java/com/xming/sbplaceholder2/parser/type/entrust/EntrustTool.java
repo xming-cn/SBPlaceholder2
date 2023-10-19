@@ -65,7 +65,6 @@ public class EntrustTool {
         } else if (NumberUtils.isDigits(str)) {
             return new IntElement(NumberUtils.toInt(str));
         } else if (NumberUtils.isNumber(str)) {
-            System.out.println(str + " is a number but not a digit");
             return new NumberElement(NumberUtils.toDouble(str));
         } else if (str.equals("void")) {
             return VoidElement.instance;
