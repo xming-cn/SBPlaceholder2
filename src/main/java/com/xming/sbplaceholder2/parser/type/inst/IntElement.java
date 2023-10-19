@@ -94,6 +94,6 @@ public class IntElement extends SBElement<IntType> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof IntElement intInst && intInst.value.equals(value);
+        return obj instanceof IntElement && ((IntElement) obj).value.equals(value);
     }
 }

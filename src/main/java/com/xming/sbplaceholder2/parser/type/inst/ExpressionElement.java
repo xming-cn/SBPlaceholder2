@@ -103,142 +103,142 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
 
             String symbol = operator[max_priority_pos];
             switch (symbol) {
-                case "+" -> {
+                case "+":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_add(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "-" -> {
+                    break;
+                case "-":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_sub(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "*" -> {
+                    break;
+                case "*":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_mul(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "/" -> {
+                    break;
+                case "/":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_div(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "**" -> {
+                    break;
+                case "**":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_double_mul(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "//" -> {
+                    break;
+                case "//":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_double_div(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case ">" -> {
+                    break;
+                case ">":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_greater(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "<" -> {
+                    break;
+                case "<":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_less(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case ">=" -> {
+                    break;
+                case ">=":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_egreater(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "<=" -> {
+                    break;
+                case "<=":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_eless(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "=" -> {
+                    break;
+                case "=":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_equal(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "!=" -> {
+                    break;
+                case "!=":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_not_equal(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "&&" -> {
+                    break;
+                case "&&":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_and(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "||" -> {
+                    break;
+                case "||":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_or(other_object);
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
                     object[other_object_pos] = null;
-                }
-                case "!" -> {
+                    break;
+                case "!":
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_not();
                     } catch (Exception e) {
                         object[this_object_pos] = VoidElement.instance;
                     }
-                }
+                    break;
             }
             operator[max_priority_pos] = null;
         }
         return object[0];
     }
     private int getPriority(String s) {
-        return switch (s) {
-            case "**" -> 7;
-            case "*", "/", "%", "//" -> 6;
-            case "+", "-" -> 5;
-            case ">", "<", ">=", "<=" -> 4;
-            case "=", "!=" -> 3;
-            case "&&" -> 2;
-            case "||" -> 1;
-            case "!" -> 0;
-            default -> -1;
-        };
+        switch (s) {
+            case "**": return 7;
+            case "*": case "/": case "%": case "//": return 6;
+            case "+": case "-": return 5;
+            case ">": case "<": case ">=": case "<=": return 4;
+            case "=": case "!=": return 3;
+            case "&&": return 2;
+            case "||": return 1;
+            case "!": return 0;
+            default: return -1;
+        }
     }
     @Override
     public ExpressionElement clone() {

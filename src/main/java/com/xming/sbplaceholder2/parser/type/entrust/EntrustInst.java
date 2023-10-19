@@ -51,55 +51,67 @@ public class EntrustInst implements Cloneable {
         while (!tasks.isEmpty()) {
             Task task = tasks.remove(0);
             if (parser.depth < parser.debug) {
-                SBPlaceholder2.logger.info("┃ ".repeat(parser.depth) + "┏  处理 " + object.toDebug() + " 的 " + task + " 委托");
+                StringBuilder prefix = new StringBuilder();
+                for (int i = 0; i < parser.depth; i++) {
+                    prefix.append("┃ ");
+                }
+                SBPlaceholder2.logger.info(prefix + "┏  处理 " + object.toDebug() + " 的 " + task + " 委托");
             }
             parser.depth++;
             try {
-                object = switch (task.type()) {
-                    case CALL_SELF -> object.symbol_call(parser, task.args());
-                    case CALL_METHOD -> {
+                switch (task.type()) {
+                    case CALL_SELF:
+                        object.symbol_call(parser, task.args());
+                        break;
+                    case CALL_METHOD:
                         TypeManager.SBMethod method = TypeManager.getInstance().getMethod(object, task.name());
                         if (method == null) {
                             throw new RuntimeException("Method not found: " + task.name());
                         }
-                        yield method.trigger(parser, object, task.args());
-                    }
-                    case GET_FIELD -> object.symbol_getField(parser, task.name());
-                    case SUB_EXPRESSION -> {
-                        if (object instanceof ExpressionElement expression) {
-                            yield expression.parse(parser);
+                        object = method.trigger(parser, object, task.args());
+                        break;
+                    case GET_FIELD:
+                        object.symbol_getField(parser, task.name());
+                        break;
+                    case SUB_EXPRESSION:
+                        if (object instanceof ExpressionElement) {
+                            object = ((ExpressionElement)object).parse(parser);
                         } else {
                             throw new RuntimeException("SUB_EXPRESSION entrust can't cast on " + object.getClass().getName());
                         }
-                    }
-                    case PARSE_VARIABLE -> {
-                        if (object instanceof StringElement inst) {
+                        break;
+                    case PARSE_VARIABLE:
+                        if (object instanceof StringElement) {
+                            StringElement inst = (StringElement) object;
                             if (parser.getVariables().containsKey(inst.value)) {
-                                yield parser.getVariables().get(inst.value);
+                                object = parser.getVariables().get(inst.value);
                             } else if (Parser.getGlobal_variables().containsKey(inst.value)) {
-                                yield Parser.getGlobal_variables().get(inst.value);
+                                object = Parser.getGlobal_variables().get(inst.value);
                             } else if (inst.value.startsWith("{") && inst.value.endsWith("}")) {
-                                yield new StringElement(PlaceholderAPI.setPlaceholders(
+                                object = new StringElement(PlaceholderAPI.setPlaceholders(
                                         player, "%" + inst.value.substring(1, inst.value.length() - 1) + "%"));
                             } else if (TypeManager.getInstance().getTypes().contains(inst.value)) {
-                                yield TypeType.inst.newInst(inst.asString().value);
+                                object = TypeType.inst.newInst(inst.asString().value);
                             } else {
                                 FastElementBuildEvent event = new FastElementBuildEvent(parser, inst.value);
                                 Bukkit.getPluginManager().callEvent(event);
-                                if (event.getResult() == null) yield object;
-                                else yield event.getResult();
+                                if (event.getResult() != null) {
+                                    object = event.getResult();
+                                }
                             }
-                        } else {
-                            yield object;
                         }
-                    }
+                        break;
                 };
             } catch (Exception e) {
                 object = VoidElement.instance;
             }
             parser.depth--;
             if (parser.depth < parser.debug) {
-                SBPlaceholder2.logger.info("┃ ".repeat(parser.depth) + "┗  委托完成" + ": " + object.toDebug());
+                StringBuilder prefix = new StringBuilder();
+                for (int i = 0; i < parser.depth; i++) {
+                    prefix.append("┃ ");
+                }
+                SBPlaceholder2.logger.info(prefix + "┗  委托完成" + ": " + object.toDebug());
             }
         }
         return object;

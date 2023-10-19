@@ -73,6 +73,6 @@ public class BoolElement extends SBElement<BoolType> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof BoolElement boolInst && boolInst.toBool() == toBool();
+        return obj instanceof BoolElement && ((BoolElement) obj).toBool() == toBool();
     }
 }

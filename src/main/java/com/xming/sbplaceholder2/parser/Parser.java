@@ -84,7 +84,8 @@ public class Parser {
         if (global_variables == null) loadGlobalVariables();
         variables.put("player", new PlayerElement(player));
 
-        if (expression instanceof ExpressionElement expressionInst) {
+        if (expression instanceof ExpressionElement) {
+            ExpressionElement expressionInst = (ExpressionElement) expression;
             expression = expressionInst.parse(this);
         }
         if (this.debug >= 0) {

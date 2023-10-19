@@ -91,6 +91,6 @@ public class NumberElement extends SBElement<NumberType> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof NumberElement numberInst && numberInst.value.equals(value);
+        return obj instanceof NumberElement && ((NumberElement) obj).value.equals(value);
     }
 }

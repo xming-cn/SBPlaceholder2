@@ -40,11 +40,11 @@ public class PlayerElement extends SBElement<PlayerType> {
     @Override
     public SBElement<?> symbol_getField(Parser parser, String name) {
         if (value == null) return VoidElement.instance;
-        return switch (name.toLowerCase()) {
-            case "name" -> new StringElement(Objects.requireNonNull(value.getName()));
-            case "uuid" -> new StringElement(value.getUniqueId().toString());
-            default -> new StringElement("undefined element");
-        };
+        switch (name.toLowerCase()) {
+            case "name": return new StringElement(Objects.requireNonNull(value.getName()));
+            case "uuid": return new StringElement(value.getUniqueId().toString());
+            default: return new StringElement("undefined element");
+        }
     }
     @Override
     public int hashCode() {
@@ -58,8 +58,8 @@ public class PlayerElement extends SBElement<PlayerType> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof PlayerElement playerInst) {
-            return value.equals(playerInst.value);
+        if (obj instanceof PlayerElement) {
+            return value.equals(((PlayerElement) obj).value);
         }
         return false;
     }

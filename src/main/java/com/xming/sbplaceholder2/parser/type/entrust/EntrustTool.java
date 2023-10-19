@@ -15,7 +15,8 @@ public class EntrustTool {
         SBElement<?> object = getInstFromString(entrust, actions.remove(0));
         entrust.setObject(object);
         if (!actions.isEmpty()) {
-            if (object instanceof IntElement intInst) {
+            if (object instanceof IntElement) {
+                IntElement intInst = (IntElement) object;
                 String digits = actions.get(0);
                 if (NumberUtils.isDigits(digits)) {
                     entrust.setObject(new NumberElement(intInst.value + NumberUtils.toDouble("0." + digits)));

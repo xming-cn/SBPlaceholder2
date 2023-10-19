@@ -44,6 +44,6 @@ public class TypeElement extends SBElement<TypeType> {
     }
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof TypeElement typeInst && typeInst.value.equals(value);
+        return obj instanceof TypeElement && ((TypeElement) obj).value.equals(value);
     }
 }

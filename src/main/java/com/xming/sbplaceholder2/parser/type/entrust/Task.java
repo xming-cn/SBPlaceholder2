@@ -3,8 +3,27 @@ package com.xming.sbplaceholder2.parser.type.entrust;
 import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 
-public record Task(TaskType type, @Nullable String name, @Nullable EntrustInst... args) {
-    enum TaskType {
+public class Task {
+    private final TaskType type;
+    private final String name;
+    private final EntrustInst[] args;
+    public Task(TaskType type, @Nullable String name, @Nullable EntrustInst... args) {
+        this.type = type;
+        this.name = name;
+        this.args = args;
+    }
+
+    public TaskType type() {
+        return type;
+    }
+    public String name() {
+        return name;
+    }
+    public EntrustInst[] args() {
+        return args;
+    }
+
+    public enum TaskType {
         CALL_SELF,
         CALL_METHOD,
         GET_FIELD,

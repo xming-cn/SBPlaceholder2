@@ -67,7 +67,11 @@ public class StringElement extends SBElement<StringType> {
 
     @Override
     public StringElement symbol_mul(SBElement<?> other) {
-        return new StringElement(value.repeat(other.asInt().value));
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < other.asInt().value; i++) {
+            result.append(value);
+        }
+        return new StringElement(result.toString());
     }
 
     @Override
@@ -88,7 +92,8 @@ public class StringElement extends SBElement<StringType> {
     }
     @ElementMethod(name = "papi", args = {"Player?"}, returnType = "String")
     public StringElement method_papi(Parser parser, EntrustInst[] args) {
-        OfflinePlayer p = args[0].execute(parser) instanceof PlayerElement target ? target.value : parser.getPlayer().value;
+        SBElement<?> execute = args[0].execute(parser);
+        OfflinePlayer p = execute instanceof PlayerElement ? ((PlayerElement) execute).value : parser.getPlayer().value;
         return new StringElement(PlaceholderAPI.setPlaceholders(p, "%" + value + "%"));
     }
     @ElementMethod(name = "color", args = {"String?"}, returnType = "String")
