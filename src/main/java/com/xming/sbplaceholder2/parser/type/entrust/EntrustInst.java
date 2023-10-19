@@ -61,7 +61,7 @@ public class EntrustInst implements Cloneable {
             try {
                 switch (task.type()) {
                     case CALL_SELF:
-                        object.symbol_call(parser, task.args());
+                        object = object.symbol_call(parser, task.args());
                         break;
                     case CALL_METHOD:
                         TypeManager.SBMethod method = TypeManager.getInstance().getMethod(object, task.name());
