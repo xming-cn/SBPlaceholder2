@@ -14,7 +14,7 @@ public class EntrustTool {
         EntrustInst entrust = new EntrustInst();
         SBElement<?> object = getInstFromString(entrust, actions.remove(0));
         entrust.setObject(object);
-        if (actions.size() > 0) {
+        if (!actions.isEmpty()) {
             if (object instanceof IntElement intInst) {
                 String digits = actions.get(0);
                 if (NumberUtils.isDigits(digits)) {
@@ -24,7 +24,7 @@ public class EntrustTool {
             }
         }
 
-        if (actions.size() == 0) {
+        if (actions.isEmpty()) {
             return entrust;
         }
 

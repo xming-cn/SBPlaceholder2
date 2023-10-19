@@ -15,6 +15,7 @@ import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 public class EntrustInst implements Cloneable {
     SBElement<?> object;
@@ -40,7 +41,7 @@ public class EntrustInst implements Cloneable {
         try {
             object = (SBElement<?>) this.object.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            SBPlaceholder2.logger.log(Level.SEVERE, "Clone failed", e);
             return null;
         }
         ArrayList<Task> tasks = new ArrayList<>();
