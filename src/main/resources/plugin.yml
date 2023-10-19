@@ -7,6 +7,6 @@ commands:
     sbplaceholder:
         description: SBPlaceholder command
         usage: /<command>
-        aliases: [sbp]
+        aliases: [sbp, sbp2, sb2]
         permission: sbplaceholder.command
         permission-message: You don't have permission to use this command.
