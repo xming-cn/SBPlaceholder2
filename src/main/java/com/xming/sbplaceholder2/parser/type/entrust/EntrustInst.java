@@ -7,6 +7,7 @@ import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.TypeManager;
 import com.xming.sbplaceholder2.parser.type.inst.ExpressionElement;
 import com.xming.sbplaceholder2.parser.type.inst.StringElement;
+import com.xming.sbplaceholder2.parser.type.inst.VoidElement;
 import com.xming.sbplaceholder2.parser.type.type.TypeType;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -52,45 +53,49 @@ public class EntrustInst implements Cloneable {
                 SBPlaceholder2.logger.info("┃ ".repeat(parser.depth) + "┏  处理 " + object.toDebug() + " 的 " + task + " 委托");
             }
             parser.depth++;
-            object = switch (task.type()) {
-                case CALL_SELF -> object.symbol_call(parser, task.args());
-                case CALL_METHOD -> {
-                    TypeManager.SBMethod method = TypeManager.getInstance().getMethod(object, task.name());
-                    if (method == null) {
-                        throw new RuntimeException("Method not found: " + task.name());
-                    }
-                    yield method.trigger(parser, object, task.args());
-                }
-                case GET_FIELD -> object.symbol_getField(parser, task.name());
-                case SUB_EXPRESSION -> {
-                    if (object instanceof ExpressionElement expression) {
-                        yield expression.parse(parser);
-                    } else {
-                        throw new RuntimeException("SUB_EXPRESSION entrust can't cast on " + object.getClass().getName());
-                    }
-                }
-                case PARSE_VARIABLE -> {
-                    if (object instanceof StringElement inst) {
-                        if (parser.getVariables().containsKey(inst.value)) {
-                            yield parser.getVariables().get(inst.value);
-                        } else if (Parser.getGlobal_variables().containsKey(inst.value)) {
-                            yield Parser.getGlobal_variables().get(inst.value);
-                        } else if (inst.value.startsWith("{") && inst.value.endsWith("}")) {
-                            yield new StringElement(PlaceholderAPI.setPlaceholders(
-                                    player, "%" + inst.value.substring(1, inst.value.length() - 1) + "%"));
-                        } else if (TypeManager.getInstance().getTypes().contains(inst.value)) {
-                            yield TypeType.inst.newInst(inst.asString().value);
-                        } else {
-                            FastElementBuildEvent event = new FastElementBuildEvent(parser, inst.value);
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (event.getResult() == null)      yield object;
-                            else                                yield event.getResult();
+            try {
+                object = switch (task.type()) {
+                    case CALL_SELF -> object.symbol_call(parser, task.args());
+                    case CALL_METHOD -> {
+                        TypeManager.SBMethod method = TypeManager.getInstance().getMethod(object, task.name());
+                        if (method == null) {
+                            throw new RuntimeException("Method not found: " + task.name());
                         }
-                    } else {
-                        yield object;
+                        yield method.trigger(parser, object, task.args());
                     }
-                }
-            };
+                    case GET_FIELD -> object.symbol_getField(parser, task.name());
+                    case SUB_EXPRESSION -> {
+                        if (object instanceof ExpressionElement expression) {
+                            yield expression.parse(parser);
+                        } else {
+                            throw new RuntimeException("SUB_EXPRESSION entrust can't cast on " + object.getClass().getName());
+                        }
+                    }
+                    case PARSE_VARIABLE -> {
+                        if (object instanceof StringElement inst) {
+                            if (parser.getVariables().containsKey(inst.value)) {
+                                yield parser.getVariables().get(inst.value);
+                            } else if (Parser.getGlobal_variables().containsKey(inst.value)) {
+                                yield Parser.getGlobal_variables().get(inst.value);
+                            } else if (inst.value.startsWith("{") && inst.value.endsWith("}")) {
+                                yield new StringElement(PlaceholderAPI.setPlaceholders(
+                                        player, "%" + inst.value.substring(1, inst.value.length() - 1) + "%"));
+                            } else if (TypeManager.getInstance().getTypes().contains(inst.value)) {
+                                yield TypeType.inst.newInst(inst.asString().value);
+                            } else {
+                                FastElementBuildEvent event = new FastElementBuildEvent(parser, inst.value);
+                                Bukkit.getPluginManager().callEvent(event);
+                                if (event.getResult() == null) yield object;
+                                else yield event.getResult();
+                            }
+                        } else {
+                            yield object;
+                        }
+                    }
+                };
+            } catch (Exception e) {
+                object = VoidElement.instance;
+            }
             parser.depth--;
             if (parser.depth < parser.debug) {
                 SBPlaceholder2.logger.info("┃ ".repeat(parser.depth) + "┗  委托完成" + ": " + object.toDebug());

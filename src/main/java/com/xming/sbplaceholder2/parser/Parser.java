@@ -19,6 +19,8 @@ public class Parser {
     public int depth;
     static private HashMap<String, SBElement<?>> global_variables = null;
 
+    private final long startTime = System.currentTimeMillis();
+
     public static void loadGlobalVariables() {
         global_variables = new HashMap<>();
         global_variables.put("debug", new FunctionElement((SBElement<?>[] inst) -> new StringElement(inst[0].toDebug())));
@@ -46,12 +48,20 @@ public class Parser {
             listInst.addAll(Bukkit.getOnlinePlayers().stream().map(PlayerElement::new).toArray(SBElement[]::new));
             return listInst;
         }));
+        global_variables.put("round", new FunctionElement((SBElement<?>[] inst) -> {
+            int accuracy = inst.length > 1 ? inst[1].asInt().value : 0;
+            double value = inst[0].asNumber().value;
+            if (accuracy == 0) {
+                return new IntElement((int) Math.round(value));
+            } else {
+                return new NumberElement(Math.round(value * Math.pow(10, accuracy)) / Math.pow(10, accuracy));
+            }
+        }));
         Bukkit.getPluginManager().callEvent(new GlobalVariablesLoadEvent(global_variables));
     }
 
     public Parser(String str, @Nullable HashMap<String, SBElement<?>> variables, int debug) {
         this.debug = debug;
-        long startTime = System.currentTimeMillis();
         if (debug >= 0) {
             SBPlaceholder2.logger.info("Parser build: " + str);
             SBPlaceholder2.logger.info("debug level: " + debug);
@@ -102,5 +112,9 @@ public class Parser {
     }
     public static HashMap<String, SBElement<?>> getGlobal_variables() {
         return global_variables;
+    }
+
+    public long time() {
+        return (System.currentTimeMillis() - startTime);
     }
 }

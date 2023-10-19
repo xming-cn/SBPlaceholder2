@@ -56,7 +56,9 @@ public class EntrustTool {
                 entrust.addTask(new Task(Task.TaskType.SUB_EXPRESSION, null));
             }
             return sbElement;
-        } else if (str.startsWith("\"") && str.endsWith("\"")) {
+        } else if (str.startsWith("`") && str.endsWith("`")) {
+            return new StringElement(str.substring(1, str.length() - 1));
+        }  else if (str.startsWith("\"") && str.endsWith("\"")) {
             return new StringElement(str.substring(1, str.length() - 1));
         } else if (str.startsWith("'") && str.endsWith("'")) {
             return new StringElement(str.substring(1, str.length() - 1));
@@ -111,6 +113,7 @@ public class EntrustTool {
 
                 if (c == '"') state = '"';
                 else if (c == '\'') state = '\'';
+                else if (c == '`') state = '`';
 
                 if (c == separator) {
                     result.add(this_object.toString());
@@ -131,12 +134,15 @@ public class EntrustTool {
         for (int i = str.length() - 1; i >= 0; i--) {
             char c = str.charAt(i);
             if (state == null) {
-                if (c == '(') depth++;
-                else if (c == ')') depth--;
+                if (c == ')') depth++;
+                else if (c == '(') depth--;
                 if (depth > 0) continue;
 
+                // three way to fast build a string
                 if (c == '"') state = '"';
                 else if (c == '\'') state = '\'';
+                else if (c == '`') state = '`';
+
 
                 if (c == t) {
                     return i;

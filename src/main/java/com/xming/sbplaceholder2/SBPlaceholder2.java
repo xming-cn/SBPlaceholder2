@@ -27,6 +27,8 @@ public final class SBPlaceholder2 extends JavaPlugin implements Listener {
         Objects.requireNonNull(Bukkit.getPluginCommand("sbplaceholder")).setExecutor(new MainCommand());
         TypeManager.getInstance().loadBuiltInTypes();
         Bukkit.getPluginManager().callEvent(new SBPlaceholderLoadEvent());
+        logger.info("plugin loaded.");
+        logger.info("by xming (qq:1360197420)");
     }
 
     @Override

@@ -13,7 +13,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.Arrays;
 
 public class ExpressionElement extends SBElement<ExpressionType> implements Cloneable {
-    static final String[] symbols = {"+", "-", "**", "*", "//", "/", "%", ">=", "<=", ">", "<", "==", "!=", "&&", "||", "!"};
+    static final String[] symbols = {"+", "-", "**", "*", "//", "/", "%", ">=", "<=", ">", "<", "=", "!=", "&&", "||", "!"};
     int max_length = 4;
     public EntrustInst[] entrust = new EntrustInst[max_length + 1];
     public String[] operator = new String[max_length];
@@ -23,12 +23,19 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
     public ExpressionElement(String rawExpression) {
         int object_count = 0;
         int start_pos = 0;
-        boolean in_string = false;
+        Character string_state = null;
         int in_bracket = 0;
         for (int i = 0; i < rawExpression.length(); i++) {
-            if (rawExpression.charAt(i) == '\'' ||
-                    rawExpression.charAt(i) == '\"') in_string = !in_string;
-            if (in_string) continue;
+            if (string_state == null) {
+                if (rawExpression.charAt(i) == '\'' ||
+                        rawExpression.charAt(i) == '\"' ||
+                        rawExpression.charAt(i) == '`')
+                    string_state = rawExpression.charAt(i);
+            } else {
+                if (rawExpression.charAt(i) == string_state) string_state = null;
+            }
+            if (string_state != null) continue;
+
             if (rawExpression.charAt(i) == '(') in_bracket += 1;
             else if (rawExpression.charAt(i) == ')') in_bracket -= 1;
             if (in_bracket > 0) continue;
@@ -67,8 +74,9 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
     public SBElement<?>[] execute(Parser parser) {
         SBElement<?>[] result = new SBElement<?>[entrust.length];
         for (int i = 0; i < entrust.length; i++) {
-            if (entrust[i] != null)
+            if (entrust[i] != null) {
                 result[i] = entrust[i].execute(parser);
+            }
         }
         return result;
     }
@@ -96,62 +104,124 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
             String symbol = operator[max_priority_pos];
             switch (symbol) {
                 case "+" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_add(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_add(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case "-" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_sub(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_sub(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case "*" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_mul(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_mul(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case "/" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_div(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_div(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case "**" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_double_mul(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_double_mul(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case "//" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_double_div(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_double_div(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case ">" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_greater(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_greater(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case "<" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_less(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_less(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case ">=" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_egreater(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_egreater(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case "<=" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_eless(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_eless(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
-                case "==" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_equal(other_object);
+                case "=" -> {
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_equal(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case "!=" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_not_equal(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_not_equal(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case "&&" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_and(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_and(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
                 case "||" -> {
-                    object[this_object_pos] = object[this_object_pos].symbol_or(other_object);
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_or(other_object);
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
                     object[other_object_pos] = null;
                 }
-                case "!" -> object[this_object_pos] = object[this_object_pos].symbol_not();
+                case "!" -> {
+                    try {
+                        object[this_object_pos] = object[this_object_pos].symbol_not();
+                    } catch (Exception e) {
+                        object[this_object_pos] = VoidElement.instance;
+                    }
+                }
             }
             operator[max_priority_pos] = null;
         }
@@ -163,7 +233,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
             case "*", "/", "%", "//" -> 6;
             case "+", "-" -> 5;
             case ">", "<", ">=", "<=" -> 4;
-            case "==", "!=" -> 3;
+            case "=", "!=" -> 3;
             case "&&" -> 2;
             case "||" -> 1;
             case "!" -> 0;
