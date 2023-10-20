@@ -76,7 +76,6 @@ public class DictElement extends SBElement<DictType> {
     }
     @ElementMethod(name = "put", args = {"Any", "Any"}, returnType = "Map")
     public DictElement method_set(Parser parser, EntrustInst... args) {
-        PlayerElement player = parser.getPlayer();
         SBElement<?> arg1 = args[0].execute(parser);
         SBElement<?> arg2 = args[1].execute(parser);
         value.put(arg1, arg2);
@@ -84,13 +83,11 @@ public class DictElement extends SBElement<DictType> {
     }
     @ElementMethod(name = "containsKey", args = {"Any"}, returnType = "Bool")
     public BoolElement method_contains(Parser parser, EntrustInst... args) {
-        PlayerElement player = parser.getPlayer();
         SBElement<?> arg1 = args[0].execute(parser);
         return BoolElement.fromBool(value.containsKey(arg1));
     }
     @ElementMethod(name = "remove", args = {"Any"}, returnType = "List")
     public DictElement method_remove(Parser parser, EntrustInst... args) {
-        PlayerElement player = parser.getPlayer();
         SBElement<?> arg1 = args[0].execute(parser);
         value.remove(arg1);
         return this;
@@ -113,7 +110,6 @@ public class DictElement extends SBElement<DictType> {
     }
     @ElementMethod(name = "map", args = {"Entrust"}, returnType = "List")
     public DictElement method_map(Parser parser, EntrustInst... args) {
-        PlayerElement player = parser.getPlayer();
         String k = "key";
         String v = "value";
         EntrustInst run;
@@ -133,7 +129,6 @@ public class DictElement extends SBElement<DictType> {
     }
     @ElementMethod(name = "filter", args = {"Entrust"}, returnType = "List")
     public DictElement method_filter(Parser parser, EntrustInst... args) {
-        PlayerElement player = parser.getPlayer();
         String k = "key";
         String v = "value";
         EntrustInst run;

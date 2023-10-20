@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class TypeManager {
     private static TypeManager instance = null;
@@ -93,7 +94,7 @@ public class TypeManager {
                 try {
                     return (SBElement<?>) method.invoke(object, parser, args);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    SBPlaceholder2.logger.log(Level.SEVERE, "Invoke failed", e);
                     return null;
                 }
             } else {

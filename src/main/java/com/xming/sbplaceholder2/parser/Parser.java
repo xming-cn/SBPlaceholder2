@@ -121,8 +121,7 @@ public class Parser {
         }
         ArrayList<VoidElement> relational = voidElement.getRelational();
         for (int i = 0; i < relational.size(); i++) {
-            if (i == relational.size() - 1) printVoid(relational.get(i), level + 1, true);
-            else                            printVoid(relational.get(i), level + 1, false);
+            printVoid(relational.get(i), level + 1, i == relational.size() - 1);
         }
     }
 

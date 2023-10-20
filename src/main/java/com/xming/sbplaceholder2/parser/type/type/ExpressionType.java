@@ -12,6 +12,7 @@ import com.xming.sbplaceholder2.parser.type.inst.VoidElement;
 import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class ExpressionType extends SBType<SBElement<?>> {
     public static ExpressionType inst = new ExpressionType();
@@ -47,7 +48,7 @@ public class ExpressionType extends SBType<SBElement<?>> {
             try {
                 return (SBElement<?>) ExpressionType.cache.get(string).clone();
             } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
+                SBPlaceholder2.logger.log(Level.SEVERE, "Clone failed", e);
                 return null;
             }
         } else {
