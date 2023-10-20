@@ -104,14 +104,14 @@ public class TypeManager {
 
         public SBElement<?> trigger(Parser parser, SBElement<?> object, EntrustInst... args) {
             // if args hint end with "..." then it means the method can accept any number of args
-            // if args hint end with "?" then it means when the args is null, autofill the void args
+            // if args hint end with "?" then it means when the args is null, autofill the void
             for (int i = 0; i < argsHint.length; i++) {
                 String hint = argsHint[i];
                 int length = args.length;
                 if (hint.endsWith("?") || hint.endsWith("...")) {
                     if (length <= i) {
                         args = Arrays.copyOf(args, i + 1);
-                        args[i] = new EntrustInst(VoidElement.instance);
+                        args[i] = new EntrustInst(new VoidElement("可空参数为空"));
                     }
                 } else {
                     if (length <= i) {

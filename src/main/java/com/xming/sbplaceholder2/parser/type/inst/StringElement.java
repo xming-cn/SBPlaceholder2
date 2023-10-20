@@ -99,7 +99,7 @@ public class StringElement extends SBElement<StringType> {
     @ElementMethod(name = "color", args = {"String?"}, returnType = "String")
     public StringElement method_color(Parser parser, EntrustInst[] args) {
         SBElement<?> arg1 = args[0].execute(parser);
-        char c = arg1.equals(VoidElement.instance) ? '&' : arg1.asString().value.charAt(0);
+        char c = arg1 instanceof VoidElement ? '&' : arg1.asString().value.charAt(0);
         return new StringElement(ChatColor.translateAlternateColorCodes(c, value));
     }
     @ElementMethod(name = "slice", alias = "substring", args = {"Int", "Int?"}, returnType = "String")
@@ -109,7 +109,7 @@ public class StringElement extends SBElement<StringType> {
         SBElement<?> arg2 = args[1].execute(parser);
         int start;
         int end;
-        if (arg2.equals(VoidElement.instance)) {
+        if (arg2 instanceof VoidElement) {
             start = 0;
             end = arg1.value;
         } else {
@@ -157,7 +157,7 @@ public class StringElement extends SBElement<StringType> {
     @ElementMethod(name = "split", args = {"String?"}, returnType = "List")
     public ListElement method_split(Parser parser, EntrustInst[] args) {
         SBElement<?> arg1 = args[0].execute(parser);
-        String[] split = value.split(arg1.equals(VoidElement.instance) ? " " : arg1.asString().value);
+        String[] split = value.split(arg1 instanceof VoidElement ? " " : arg1.asString().value);
         StringElement[] insts = Arrays.stream(split).map(StringElement::new).toArray(StringElement[]::new);
         return new ListElement(insts);
     }

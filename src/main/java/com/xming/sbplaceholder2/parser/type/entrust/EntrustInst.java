@@ -103,7 +103,16 @@ public class EntrustInst implements Cloneable {
                         break;
                 }
             } catch (Exception e) {
-                object = VoidElement.instance;
+                StringBuilder cause = new StringBuilder("执行 " + task.type().name() + " 委托时发生错误\n" +
+                        "委托对象: " + object.toDebug() + "\n" +
+                        "委托名: " + task.name() + "\n");
+                if (task.args() != null && task.args().length > 0) {
+                    cause.append("委托参数: ");
+                    for (int i = 0; i < task.args().length; i++) {
+                        cause.append("\n> ").append(task.args()[i].toString());
+                    }
+                }
+                object = new VoidElement(cause.toString(), object);
             }
             parser.depth--;
             if (parser.depth < parser.debug) {

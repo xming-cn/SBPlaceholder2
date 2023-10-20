@@ -68,7 +68,7 @@ public class EntrustTool {
         } else if (NumberUtils.isNumber(str)) {
             return new NumberElement(NumberUtils.toDouble(str));
         } else if (str.equals("void")) {
-            return VoidElement.instance;
+            return new VoidElement("快速构造");
         } else if (str.equals("true")) {
             return BoolElement.trueInstance;
         } else if (str.equals("false")) {

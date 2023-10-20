@@ -5,9 +5,21 @@ import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.type.VoidType;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class VoidElement extends SBElement<VoidType> {
-    public static final VoidElement instance = new VoidElement();
-    private VoidElement() {
+    String cause;
+    protected ArrayList<VoidElement> relational = new ArrayList<>();
+    public VoidElement(String cause, SBElement<?>... relational) {
+        this.cause = cause;
+        this.relational.addAll(
+                Arrays.stream(relational)
+                        .filter(sbElement -> sbElement instanceof VoidElement)
+                        .map(sbElement -> (VoidElement) sbElement)
+                        .collect(Collectors.toList())
+        );
     }
     @Override
     public Plugin getPlugin() {
@@ -23,7 +35,7 @@ public class VoidElement extends SBElement<VoidType> {
     }
     @Override
     public Object clone() {
-        return instance;
+        return new VoidElement(cause);
     }
 
     @Override
@@ -34,5 +46,13 @@ public class VoidElement extends SBElement<VoidType> {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof VoidElement;
+    }
+
+    public String getCause() {
+        return cause;
+    }
+
+    public ArrayList<VoidElement> getRelational() {
+        return relational;
     }
 }

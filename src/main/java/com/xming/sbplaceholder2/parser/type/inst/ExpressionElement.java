@@ -107,7 +107,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_add(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 + 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -115,7 +115,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_sub(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 - 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -123,7 +123,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_mul(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 * 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -131,7 +131,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_div(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 / 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -139,7 +139,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_double_mul(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 ** 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -147,7 +147,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_double_div(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 // 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -155,7 +155,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_greater(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 > 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -163,7 +163,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_less(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 < 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -171,7 +171,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_egreater(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 >= 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -179,7 +179,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_eless(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 <= 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -187,7 +187,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_equal(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 = 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -195,7 +195,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_not_equal(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 != 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -203,7 +203,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_and(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 && 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -211,7 +211,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_or(other_object);
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 与 " + other_object.toDebug() + " 处理 || 运算符", object[this_object_pos], other_object);
                     }
                     object[other_object_pos] = null;
                     break;
@@ -219,7 +219,7 @@ public class ExpressionElement extends SBElement<ExpressionType> implements Clon
                     try {
                         object[this_object_pos] = object[this_object_pos].symbol_not();
                     } catch (Exception e) {
-                        object[this_object_pos] = VoidElement.instance;
+                        object[this_object_pos] = new VoidElement("无法为 " + object[this_object_pos].toDebug() + " 处理 ! 运算符", object[this_object_pos]);
                     }
                     break;
             }

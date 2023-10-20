@@ -35,7 +35,7 @@ public class ExpressionType extends SBType<SBElement<?>> {
         if (ExpressionType.cache.isEmpty()) {
             addCache("true", BoolElement.trueInstance);
             addCache("false", BoolElement.falseInstance);
-            addCache("void", VoidElement.instance);
+            addCache("void", new VoidElement("快速构造"));
             addCache("", new StringElement(""));
         }
         if (cache) {

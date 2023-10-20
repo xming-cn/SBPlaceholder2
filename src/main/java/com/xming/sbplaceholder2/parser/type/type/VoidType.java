@@ -27,6 +27,6 @@ public class VoidType extends SBType<VoidElement> {
 
     @Override
     public VoidElement newInst(Parser parser, EntrustInst... insts) {
-        return VoidElement.instance;
+        return new VoidElement("由 Void 类型创建");
     }
 }

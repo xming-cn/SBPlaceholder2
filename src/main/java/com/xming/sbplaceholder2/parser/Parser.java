@@ -5,10 +5,12 @@ import com.xming.sbplaceholder2.event.GlobalVariablesLoadEvent;
 import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.inst.*;
 import com.xming.sbplaceholder2.parser.type.type.ExpressionType;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Parser {
@@ -68,6 +70,9 @@ public class Parser {
         }
         this.raw_expression = str;
         if (variables == null) this.variables = new HashMap<>();
+        this.variables.put("papi", new FunctionElement(
+                (SBElement<?>[] inst) -> new StringElement(PlaceholderAPI.setPlaceholders(this.getPlayer().value, "%" + inst[0] + "%"))
+        ));
         expression = ExpressionType.inst.newInst(raw_expression, true);
         if (debug >= 0) {
             SBPlaceholder2.logger.info("Parser build success in " + (System.currentTimeMillis() - startTime) + "ms");
@@ -91,7 +96,34 @@ public class Parser {
         if (this.debug >= 0) {
             SBPlaceholder2.logger.info("Parser parse success in " + (System.currentTimeMillis() - startTime) + "ms");
         }
+        if (expression instanceof VoidElement) {
+            VoidElement voidElement = (VoidElement) expression;
+            SBPlaceholder2.logger.warning("表达式 " + raw_expression + " 被拉入虚空!");
+            printVoid(voidElement, 0, true);
+        }
         return expression.asString();
+    }
+
+    private void printVoid(VoidElement voidElement, Integer level, boolean end) {
+        StringBuilder prefix = new StringBuilder();
+        for (int i = 0; i < level; i++) {
+            prefix.append("    ");
+        }
+
+        String[] split = voidElement.getCause().split("\n");
+        for (int i = 0; i < split.length; i++) {
+            if (i == 0)
+                if (end)    SBPlaceholder2.logger.warning(prefix + "┗   " + split[i]);
+                else        SBPlaceholder2.logger.warning(prefix + "┣   " + split[i]);
+            else
+                if (end)    SBPlaceholder2.logger.warning(prefix + "    " + split[i]);
+                else        SBPlaceholder2.logger.warning(prefix + "┃   " + split[i]);
+        }
+        ArrayList<VoidElement> relational = voidElement.getRelational();
+        for (int i = 0; i < relational.size(); i++) {
+            if (i == relational.size() - 1) printVoid(relational.get(i), level + 1, true);
+            else                            printVoid(relational.get(i), level + 1, false);
+        }
     }
 
     public String getRaw_expression() {

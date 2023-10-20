@@ -39,7 +39,7 @@ public class PlayerElement extends SBElement<PlayerType> {
 
     @Override
     public SBElement<?> symbol_getField(Parser parser, String name) {
-        if (value == null) return VoidElement.instance;
+        if (value == null) return new VoidElement("玩家不存在");
         switch (name.toLowerCase()) {
             case "name": return new StringElement(Objects.requireNonNull(value.getName()));
             case "uuid": return new StringElement(value.getUniqueId().toString());

@@ -60,7 +60,7 @@ public class DictElement extends SBElement<DictType> {
                 return value.get(sbElement);
             }
         }
-        return VoidElement.instance;
+        return new VoidElement("Dict 中不存在的键: " + name);
     }
     @ElementMethod(name = "size", alias = {"length"}, returnType = "Int")
     public IntElement method_size(Parser parser, EntrustInst... args) {
@@ -68,10 +68,9 @@ public class DictElement extends SBElement<DictType> {
     }
     @ElementMethod(name = "get", args = {"Any"}, returnType = "Any")
     public SBElement<?> method_get(Parser parser, EntrustInst... args) {
-        PlayerElement player = parser.getPlayer();
         SBElement<?> arg1 = args[0].execute(parser);
         if (!value.containsKey(arg1)) {
-            return VoidElement.instance;
+            return new VoidElement("Dict 中不存在的键: " + arg1);
         }
         return value.get(arg1);
     }

@@ -19,6 +19,10 @@ import java.util.logging.Level;
 public class MainCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (args.length == 0) {
+            printHelp(sender);
+            return true;
+        }
         switch (args[0]) {
             case "cache":
                 for (String str : ExpressionType.cache.keySet()) {
@@ -78,6 +82,9 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                 Parser.loadGlobalVariables();
                 sender.sendMessage("§aReload Success!");
                 break;
+            default:
+                sender.sendMessage("§c未知的命令");
+                sender.sendMessage("§f使用 §e/sbp §f查看命令列表");
         }
         return true;
     }
@@ -87,7 +94,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         switch (args.length) {
             case 1:
-                return Arrays.asList("cache", "test", "process", "type", "global", "types", "reload");
+                return Arrays.asList("test", "process", "types", "type", "cache", "global", "reload");
             case 2 :
                 switch (args[0]) {
                     case "type":
@@ -97,5 +104,21 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                 }
         }
         return Collections.emptyList();
+    }
+    public void printHelp(CommandSender sender) {
+        sender.sendMessage("§f/sbp test <表达式>");
+        sender.sendMessage("  §7测试表达式");
+        sender.sendMessage("§f/sbp process <表达式>");
+        sender.sendMessage("  §7测试表达式, 并显示详细的过程");
+        sender.sendMessage("§f/sbp type <类型>");
+        sender.sendMessage("  §7查看类型信息");
+        sender.sendMessage("§f/sbp types");
+        sender.sendMessage("  §7查看所有已注册的类型");
+        sender.sendMessage("§f/sbp cache");
+        sender.sendMessage("  §7查看缓存");
+        sender.sendMessage("§f/sbp global");
+        sender.sendMessage("  §7查看全局变量");
+        sender.sendMessage("§f/sbp reload");
+        sender.sendMessage("  §7重载插件");
     }
 }

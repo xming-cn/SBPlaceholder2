@@ -93,7 +93,7 @@ public abstract class SBElement<T extends SBType<?>> implements TypeInstanceOf<T
     }
     @ElementMethod(name = "ifVoid", alias = {"?"}, args = {"Any"})
     public SBElement<?> method_ifVoid(Parser parser, EntrustInst... args) {
-        if (this.equals(VoidElement.instance)) {
+        if (this instanceof VoidElement) {
             return args[0].execute(parser);
         } else return this;
     }
