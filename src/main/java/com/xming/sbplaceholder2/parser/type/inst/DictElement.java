@@ -64,7 +64,7 @@ public class DictElement extends SBElement<DictType> {
     }
     @ElementMethod(name = "size", alias = {"length"}, returnType = "Int")
     public IntElement method_size(Parser parser, EntrustInst... args) {
-        return new IntElement(value.size());
+        return new IntElement((long) value.size());
     }
     @ElementMethod(name = "get", args = {"Any"}, returnType = "Any")
     public SBElement<?> method_get(Parser parser, EntrustInst... args) {

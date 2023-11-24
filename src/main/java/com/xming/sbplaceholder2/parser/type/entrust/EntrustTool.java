@@ -64,7 +64,7 @@ public class EntrustTool {
         } else if (str.startsWith("'") && str.endsWith("'")) {
             return new StringElement(str.substring(1, str.length() - 1));
         } else if (NumberUtils.isDigits(str)) {
-            return new IntElement(NumberUtils.toInt(str));
+            return new IntElement(NumberUtils.toLong(str));
         } else if (NumberUtils.isNumber(str)) {
             return new NumberElement(NumberUtils.toDouble(str));
         } else if (str.equals("void")) {

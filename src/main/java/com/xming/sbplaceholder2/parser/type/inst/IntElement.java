@@ -10,8 +10,8 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 public class IntElement extends SBElement<IntType> {
-    @NotNull public final Integer value;
-    public IntElement(@NotNull Integer value) {
+    @NotNull public final Long value;
+    public IntElement(@NotNull Long value) {
         this.value = value;
     }
     @Override

@@ -30,7 +30,7 @@ public class Parser {
         global_variables.put("getAuthor", new FunctionElement((SBElement<?>[] inst) -> new StringElement("xming_jun")));
         global_variables.put("if", new FunctionElement((SBElement<?>[] inst) -> inst[0].asBool().toBool() ? inst[1] : inst[2]));
         global_variables.put("range", new FunctionElement((SBElement<?>[] inst) -> {
-            int start = 0, end = 0, step = 1;
+            long start = 0, end = 0, step = 1;
             if (inst.length == 1) {
                 end = inst[0].asInt().value;
             } else if (inst.length == 2) {
@@ -42,7 +42,7 @@ public class Parser {
                 step = inst[2].asInt().value;
             }
             ListElement listInst = new ListElement();
-            for (int i = start; i < end; i += step) listInst.append(new IntElement(i));
+            for (long i = start; i < end; i += step) listInst.append(new IntElement(i));
             return listInst;
         }));
         global_variables.put("online", new FunctionElement((SBElement<?>[] inst) -> {
@@ -51,10 +51,10 @@ public class Parser {
             return listInst;
         }));
         global_variables.put("round", new FunctionElement((SBElement<?>[] inst) -> {
-            int accuracy = inst.length > 1 ? inst[1].asInt().value : 0;
+            long accuracy = inst.length > 1 ? inst[1].asInt().value : 0;
             double value = inst[0].asNumber().value;
             if (accuracy == 0) {
-                return new IntElement((int) Math.round(value));
+                return new IntElement(Math.round(value));
             } else {
                 return new NumberElement(Math.round(value * Math.pow(10, accuracy)) / Math.pow(10, accuracy));
             }

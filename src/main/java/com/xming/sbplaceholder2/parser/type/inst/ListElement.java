@@ -62,20 +62,20 @@ public class ListElement extends SBElement<ListType> {
     }
     @ElementMethod(name = "size", alias = {"length"}, returnType = "Int")
     public IntElement method_size(Parser parser, EntrustInst... args) {
-        return new IntElement(value.size());
+        return new IntElement((long) value.size());
     }
     @ElementMethod(name = "get", args = {"Int"}, returnType = "Any")
     public SBElement<?> method_get(Parser parser, EntrustInst... args) {
         PlayerElement player = parser.getPlayer();
         IntElement arg1 = args[0].execute(parser).asInt();
-        return value.get(arg1.value);
+        return value.get(Math.toIntExact(arg1.value));
     }
     @ElementMethod(name = "set", args = {"Int", "Any"}, returnType = "List")
     public ListElement method_set(Parser parser, EntrustInst... args) {
         PlayerElement player = parser.getPlayer();
         IntElement arg1 = args[0].execute(parser).asInt();
         SBElement<?> args2 = args[1].execute(parser);
-        value.set(arg1.value, args2);
+        value.set(Math.toIntExact(arg1.value), args2);
         return this;
     }
     @ElementMethod(name = "join", args = {"String"}, returnType = "String")
@@ -108,7 +108,7 @@ public class ListElement extends SBElement<ListType> {
     public ListElement method_remove(Parser parser, EntrustInst... args) {
         PlayerElement player = parser.getPlayer();
         IntElement arg1 = args[0].execute(parser).asInt();
-        value.remove((int) arg1.value);
+        value.remove(Math.toIntExact(arg1.value));
         return this;
     }
     @ElementMethod(name = "insert", args = {"Int", "Any"}, returnType = "List")
@@ -116,7 +116,7 @@ public class ListElement extends SBElement<ListType> {
         PlayerElement player = parser.getPlayer();
         IntElement arg1 = args[0].execute(parser).asInt();
         SBElement<?> args2 = args[1].execute(parser);
-        value.add(arg1.value, args2);
+        value.add(Math.toIntExact(arg1.value), args2);
         return this;
     }
     @ElementMethod(name = "contains", args = {"Any"}, returnType = "Bool")
@@ -129,13 +129,13 @@ public class ListElement extends SBElement<ListType> {
     public IntElement method_index(Parser parser, EntrustInst... args) {
         PlayerElement player = parser.getPlayer();
         SBElement<?> arg1 = args[0].execute(parser);
-        return new IntElement(value.indexOf(arg1));
+        return new IntElement((long) value.indexOf(arg1));
     }
     @ElementMethod(name = "lastIndex", args = {"Any"}, returnType = "Int")
     public IntElement method_lastIndex(Parser parser, EntrustInst... args) {
         PlayerElement player = parser.getPlayer();
         SBElement<?> arg1 = args[0].execute(parser);
-        return new IntElement(value.lastIndexOf(arg1));
+        return new IntElement((long) value.lastIndexOf(arg1));
     }
     @ElementMethod(name = "random", returnType = "Any")
     public SBElement<?> method_random(Parser parser, EntrustInst... args) {

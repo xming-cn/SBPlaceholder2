@@ -47,7 +47,7 @@ public class StringElement extends SBElement<StringType> {
 
     @Override
     public IntElement asInt() {
-        return new IntElement(Integer.parseInt(value));
+        return new IntElement(Long.parseLong(value));
     }
 
     @Override
@@ -111,16 +111,16 @@ public class StringElement extends SBElement<StringType> {
         int end;
         if (arg2 instanceof VoidElement) {
             start = 0;
-            end = arg1.value;
+            end = Math.toIntExact(arg1.value);
         } else {
-            start = arg1.value;
-            end = arg2.asInt().value;
+            start = Math.toIntExact(arg1.value);
+            end = Math.toIntExact(arg2.asInt().value);
         }
         return new StringElement(value.substring(start, end));
     }
     @ElementMethod(name = "length", returnType = "Int")
     public IntElement method_length(Parser parser, EntrustInst[] args) {
-        return new IntElement(value.length());
+        return new IntElement((long) value.length());
     }
     @ElementMethod(name = "replace", args = {"String", "String"}, returnType = "String")
     public StringElement method_replace(Parser parser, EntrustInst[] args) {
@@ -142,12 +142,12 @@ public class StringElement extends SBElement<StringType> {
     @ElementMethod(name = "indexOf", args = {"String"}, returnType = "Int")
     public IntElement method_indexOf(Parser parser, EntrustInst[] args) {
         String str = args[0].execute(parser).asString().value;
-        return new IntElement(value.indexOf(str));
+        return new IntElement((long) value.indexOf(str));
     }
     @ElementMethod(name = "lastIndexOf", args = {"String"}, returnType = "Int")
     public IntElement method_lastIndexOf(Parser parser, EntrustInst[] args) {
         String str = args[0].execute(parser).asString().value;
-        return new IntElement(value.lastIndexOf(str));
+        return new IntElement((long) value.lastIndexOf(str));
     }
     @ElementMethod(name = "contains", args = {"String"}, returnType = "Bool")
     public BoolElement method_contains(Parser parser, EntrustInst[] args) {

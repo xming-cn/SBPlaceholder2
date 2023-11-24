@@ -33,7 +33,7 @@ public class NumberElement extends SBElement<NumberType> {
     }
     @Override
     public IntElement asInt() {
-        return new IntElement(value.intValue());
+        return new IntElement(value.longValue());
     }
     @Override
     public NumberElement asNumber() {
@@ -73,7 +73,7 @@ public class NumberElement extends SBElement<NumberType> {
     }
     @ElementMethod(name = "round", returnType = "Int")
     public IntElement method_round(Parser parser, EntrustInst... args) {
-        return new IntElement((int) Math.round(value));
+        return new IntElement(Math.round(value));
     }
     @ElementMethod(name = "abs", returnType = "Number")
     public NumberElement method_abs(Parser parser, EntrustInst... args) {

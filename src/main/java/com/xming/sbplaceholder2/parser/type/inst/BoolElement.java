@@ -29,7 +29,7 @@ public class BoolElement extends SBElement<BoolType> {
     }
     @Override
     public IntElement asInt() {
-        return new IntElement(toBool() ? 1 : 0);
+        return new IntElement(toBool() ? 1L : 0);
     }
     @Override
     public NumberElement asNumber() {
