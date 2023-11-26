@@ -14,10 +14,13 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class StringElement extends SBElement<StringType> {
     @NotNull public final String value;
+    static public List<String> false_strings = new ArrayList<>();
 
     public StringElement(@NotNull Character str) {
         this.value = String.valueOf(str);
@@ -42,6 +45,7 @@ public class StringElement extends SBElement<StringType> {
 
     @Override
     public BoolElement asBool() {
+        if (false_strings.contains(value)) return BoolElement.fromBool(false);
         return BoolElement.fromBool(!StringUtils.isBlank(value));
     }
 

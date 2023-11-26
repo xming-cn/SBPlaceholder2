@@ -19,7 +19,7 @@ public class Parser {
     private HashMap<String, SBElement<?>> variables;
     public final int debug;
     public int depth;
-    static private HashMap<String, SBElement<?>> global_variables = null;
+    static private HashMap<String, SBElement<?>> global_variables = new HashMap<>();
 
     private final long startTime = System.currentTimeMillis();
 
@@ -86,7 +86,6 @@ public class Parser {
         if (this.debug >= 0) {
             SBPlaceholder2.logger.info("Parser parse: " + raw_expression);
         }
-        if (global_variables == null) loadGlobalVariables();
         variables.put("player", new PlayerElement(player));
 
         if (expression instanceof ExpressionElement) {

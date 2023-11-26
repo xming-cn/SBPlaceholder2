@@ -1,0 +1,9 @@
+config_version: 1.0
+
+# 所有非空字符串在进行布尔运算时都会被视为 true
+# 除了 false_strings 中的元素会被视为 false
+false_strings:
+  - 'false'
+  - 'False'
+  - 'no'
+

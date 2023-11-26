@@ -78,8 +78,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                         + Joiner.on("§7, §a").join(Parser.getGlobal_variables().keySet()));
                 break;
             case "reload":
-                Parser.getGlobal_variables().clear();
-                Parser.loadGlobalVariables();
+                SBPlaceholder2.plugin.reload();
                 sender.sendMessage("§aReload Success!");
                 break;
             default:

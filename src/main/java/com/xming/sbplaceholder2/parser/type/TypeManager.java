@@ -145,7 +145,6 @@ public class TypeManager {
         VoidType.inst.register("Void");
         TypeType.inst.register("Type");
         TimeType.inst.register("Time");
-        DurationType.inst.register("Duration");
     }
     public SBType<?> getType(String name) {
         for (String type : types.keySet()) {
