@@ -3,13 +3,14 @@ package com.xming.sbplaceholder2.parser.type.inst;
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.ElementMethod;
 import com.xming.sbplaceholder2.parser.Parser;
+import com.xming.sbplaceholder2.parser.type.CalculableElement;
 import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
 import com.xming.sbplaceholder2.parser.type.type.IntType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public class IntElement extends SBElement<IntType> {
+public class IntElement extends CalculableElement<IntType> {
     @NotNull public final Long value;
     public IntElement(@NotNull Long value) {
         this.value = value;
@@ -42,36 +43,6 @@ public class IntElement extends SBElement<IntType> {
     }
 
     @Override
-    public IntElement symbol_add(SBElement<?> other) {
-        return new IntElement(value + other.asInt().value);
-    }
-
-    @Override
-    public IntElement symbol_sub(SBElement<?> other) {
-        return new IntElement(value - other.asInt().value);
-    }
-
-    @Override
-    public IntElement symbol_mul(SBElement<?> other) {
-        return new IntElement(value * other.asInt().value);
-    }
-
-    @Override
-    public NumberElement symbol_div(SBElement<?> other) {
-        return new NumberElement(((double)value) / other.asInt().value);
-    }
-
-    @Override
-    public IntElement symbol_double_div(SBElement<?> other) {
-        return new IntElement(value / other.asInt().value);
-    }
-
-    @Override
-    public NumberElement symbol_double_mul(SBElement<?> other) {
-        return new NumberElement(Math.pow((double)value, other.asNumber().value));
-    }
-
-    @Override
     public Integer symbol_compare(SBElement<?> other) {
         return value.compareTo(other.asInt().value);
     }
@@ -95,5 +66,10 @@ public class IntElement extends SBElement<IntType> {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof IntElement && ((IntElement) obj).value.equals(value);
+    }
+
+    @Override
+    public double value() {
+        return value;
     }
 }

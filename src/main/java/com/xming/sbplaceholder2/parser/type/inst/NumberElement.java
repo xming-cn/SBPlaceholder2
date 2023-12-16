@@ -3,13 +3,14 @@ package com.xming.sbplaceholder2.parser.type.inst;
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.ElementMethod;
 import com.xming.sbplaceholder2.parser.Parser;
+import com.xming.sbplaceholder2.parser.type.CalculableElement;
 import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
 import com.xming.sbplaceholder2.parser.type.type.NumberType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public class NumberElement extends SBElement<NumberType> {
+public class NumberElement extends CalculableElement<NumberType> {
     public final @NotNull Double value;
     public NumberElement(@NotNull Double value) {
         this.value = value;
@@ -44,30 +45,6 @@ public class NumberElement extends SBElement<NumberType> {
         return new StringElement(value.toString());
     }
     @Override
-    public NumberElement symbol_add(SBElement<?> other) {
-        return new NumberElement(value + other.asNumber().value);
-    }
-    @Override
-    public NumberElement symbol_sub(SBElement<?> other) {
-        return new NumberElement(value - other.asNumber().value);
-    }
-    @Override
-    public NumberElement symbol_mul(SBElement<?> other) {
-        return new NumberElement(value * other.asNumber().value);
-    }
-    @Override
-    public NumberElement symbol_div(SBElement<?> other) {
-        return new NumberElement(value / other.asNumber().value);
-    }
-    @Override
-    public NumberElement symbol_double_div(SBElement<?> other) {
-        return new NumberElement((double)(int)(value / other.asNumber().value));
-    }
-    @Override
-    public NumberElement symbol_double_mul(SBElement<?> other) {
-        return new NumberElement(Math.pow(value, other.asNumber().value));
-    }
-    @Override
     public Integer symbol_compare(SBElement<?> other) {
         return value.compareTo(other.asNumber().value);
     }
@@ -79,11 +56,6 @@ public class NumberElement extends SBElement<NumberType> {
     public NumberElement method_abs(Parser parser, EntrustInst... args) {
         return new NumberElement(Math.abs(value));
     }
-    @ElementMethod(name = "mod", returnType = "Number", args = {"Number"})
-    public NumberElement method_mod(Parser parser, EntrustInst... args) {
-        double other = args[0].execute(parser).asNumber().value;
-        return new NumberElement(value % other);
-    }
     @Override
     public int hashCode() {
         return value.hashCode();
@@ -92,5 +64,15 @@ public class NumberElement extends SBElement<NumberType> {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof NumberElement && ((NumberElement) obj).value.equals(value);
+    }
+
+    @Override
+    public boolean decimal() {
+        return true;
+    }
+
+    @Override
+    public double value() {
+        return value;
     }
 }

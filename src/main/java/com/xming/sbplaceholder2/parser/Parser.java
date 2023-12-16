@@ -6,6 +6,7 @@ import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.inst.*;
 import com.xming.sbplaceholder2.parser.type.type.ExpressionType;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
@@ -59,10 +60,12 @@ public class Parser {
                 return new NumberElement(Math.round(value * Math.pow(10, accuracy)) / Math.pow(10, accuracy));
             }
         }));
+        global_variables.put("PI", new NumberElement(Math.PI));
+        global_variables.put("E", new NumberElement(Math.E));
         Bukkit.getPluginManager().callEvent(new GlobalVariablesLoadEvent(global_variables));
     }
 
-    public Parser(String str, @Nullable HashMap<String, SBElement<?>> variables, int debug) {
+    public Parser(String str, @Nullable HashMap<String, SBElement<?>> variables, boolean calculate, int debug) {
         this.debug = debug;
         if (debug >= 0) {
             SBPlaceholder2.logger.info("Parser build: " + str);
@@ -73,13 +76,30 @@ public class Parser {
         this.variables.put("papi", new FunctionElement(
                 (SBElement<?>[] inst) -> new StringElement(PlaceholderAPI.setPlaceholders(this.getPlayer().value, "%" + inst[0] + "%"))
         ));
+        this.variables.put("pint", new FunctionElement(
+                (SBElement<?>[] inst) -> {
+                    String s = PlaceholderAPI.setPlaceholders(this.getPlayer().value, "%" + inst[0] + "%");
+                    if (!NumberUtils.isDigits(s)) return new IntElement(0L);
+                    return new IntElement(Long.parseLong(s));
+                }
+        ));
+        this.variables.put("pnum", new FunctionElement(
+                (SBElement<?>[] inst) -> {
+                    String s = PlaceholderAPI.setPlaceholders(this.getPlayer().value, "%" + inst[0] + "%");
+                    if (!NumberUtils.isNumber(s)) return new NumberElement(0.0);
+                    return new NumberElement(Double.parseDouble(s));
+                }
+        ));
         expression = ExpressionType.inst.newInst(raw_expression, true);
         if (debug >= 0) {
             SBPlaceholder2.logger.info("Parser build success in " + (System.currentTimeMillis() - startTime) + "ms");
         }
     }
+    public Parser(String str, @Nullable HashMap<String, SBElement<?>> variables, boolean calculate) {
+        this(str, variables, calculate, -1);
+    }
     public Parser(String str, @Nullable HashMap<String, SBElement<?>> variables) {
-        this(str, variables, -1);
+        this(str, variables, false, -1);
     }
     public SBElement<?> parse(OfflinePlayer player) {
         long startTime = System.currentTimeMillis();

@@ -34,7 +34,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                 String join = Joiner.on(' ').join(args).substring(args[0].length() + 1);
                 String result;
                 try {
-                    Parser parser = new Parser(join, null, -1);
+                    Parser parser = new Parser(join, null, false, -1);
                     result = parser.parse(sender instanceof Player ? (Player) sender : null).asString().value;
                     sender.sendMessage("§a解析结果 §f" + result);
                     sender.sendMessage("§f解析用时 §e" + parser.time() + "ms");
@@ -49,7 +49,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                 String exp = Joiner.on(' ').join(args).substring(args[0].length() + 1);
                 String exp_result;
                 try {
-                    Parser parser = new Parser(exp, null, 100);
+                    Parser parser = new Parser(exp, null, false, 100);
                     exp_result = parser.parse(sender instanceof Player ? (Player) sender : null).asString().value;
                     sender.sendMessage("§a解析结果 §f" + exp_result);
                     sender.sendMessage("§f解析用时 §e" + parser.time() + "ms");

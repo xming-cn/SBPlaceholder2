@@ -30,7 +30,7 @@ public class SBPlaceholderExpansion extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
-        Parser parser = new Parser(params, null, -1);
+        Parser parser = new Parser(params, null, false, -1);
         SBElement<?> result = parser.parse(player);
 
         return ChatColor.translateAlternateColorCodes('&', result.toString());

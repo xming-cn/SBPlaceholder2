@@ -12,7 +12,7 @@ public class EntrustTool {
         String trim = str.trim();
         ArrayList<String> actions = splitBy(trim, '.');
         EntrustInst entrust = new EntrustInst();
-        SBElement<?> object = getInstFromString(entrust, actions.remove(0));
+        SBElement<?> object = getElementFromString(entrust, actions.remove(0));
         entrust.setObject(object);
         if (!actions.isEmpty()) {
             if (object instanceof IntElement) {
@@ -49,7 +49,7 @@ public class EntrustTool {
         }
         return entrust;
     }
-    public static SBElement<?> getInstFromString(EntrustInst entrust, String str) {
+    public static SBElement<?> getElementFromString(EntrustInst entrust, String str) {
         if (str.startsWith("(") && str.endsWith(")")) {
             String substring = str.substring(1, str.length() - 1);
             SBElement<?> sbElement = ExpressionType.inst.newInst(substring, false);
@@ -85,7 +85,7 @@ public class EntrustTool {
                         args[i] = new EntrustInst(inst, new Task(Task.TaskType.SUB_EXPRESSION, null));
                     else args[i] = new EntrustInst(inst);
                 }
-                SBElement<?> instFromString = getInstFromString(entrust, name);
+                SBElement<?> instFromString = getElementFromString(entrust, name);
                 entrust.addTask(new Task(Task.TaskType.CALL_SELF, null, args));
                 return instFromString;
             } else {
