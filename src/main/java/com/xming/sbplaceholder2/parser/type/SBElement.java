@@ -6,8 +6,8 @@ import com.xming.sbplaceholder2.exception.UnsupportedSingleOperationException;
 import com.xming.sbplaceholder2.exception.UnsupportedTypeCastException;
 import com.xming.sbplaceholder2.parser.ElementMethod;
 import com.xming.sbplaceholder2.parser.Parser;
+import com.xming.sbplaceholder2.parser.type.element.*;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
-import com.xming.sbplaceholder2.parser.type.inst.*;
 import org.bukkit.plugin.Plugin;
 
 public abstract class SBElement<T extends SBType<?>> implements TypeInstanceOf<T>, Cloneable {

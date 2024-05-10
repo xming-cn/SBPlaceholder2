@@ -1,5 +1,6 @@
-package com.xming.sbplaceholder2.parser.type.inst;
+package com.xming.sbplaceholder2.parser.type.element;
 
+import com.google.common.collect.Maps;
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBElement;
@@ -9,12 +10,11 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.function.Function;
 
 public class FunctionElement extends SBElement<FunctionType> {
-    @NotNull public final Function<SBElement<?>[], SBElement<?>> value;
+    @NotNull public final Maps.EntryTransformer<Parser, SBElement<?>[], SBElement<?>> value;
 
-    public FunctionElement(@NotNull Function<SBElement<?>[], SBElement<?>> func) {
+    public FunctionElement(@NotNull Maps.EntryTransformer<Parser, SBElement<?>[], SBElement<?>> func) {
         this.value = func;
     }
     @Override
@@ -31,9 +31,10 @@ public class FunctionElement extends SBElement<FunctionType> {
     }
     @Override
     public SBElement<?> symbol_call(Parser parser, EntrustInst... args) {
-        return value.apply(Arrays.stream(args)
-                .map(it -> it.execute(parser))
-                .toArray(SBElement<?>[]::new)
+        return value.transformEntry(parser,
+                Arrays.stream(args)
+                        .map(it -> it.execute(parser))
+                        .toArray(SBElement<?>[]::new)
         );
     }
 }

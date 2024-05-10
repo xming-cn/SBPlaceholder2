@@ -1,4 +1,4 @@
-package com.xming.sbplaceholder2.parser.type.inst;
+package com.xming.sbplaceholder2.parser.type.element;
 
 import com.google.common.base.Joiner;
 import com.xming.sbplaceholder2.SBPlaceholder2;

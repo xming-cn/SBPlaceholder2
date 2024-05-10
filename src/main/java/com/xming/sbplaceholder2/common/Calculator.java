@@ -1,8 +1,8 @@
 package com.xming.sbplaceholder2.common;
 
 import com.xming.sbplaceholder2.parser.type.CalculableElement;
-import com.xming.sbplaceholder2.parser.type.inst.IntElement;
-import com.xming.sbplaceholder2.parser.type.inst.NumberElement;
+import com.xming.sbplaceholder2.parser.type.element.IntElement;
+import com.xming.sbplaceholder2.parser.type.element.NumberElement;
 
 public class Calculator {
     CalculableElement<?> left;

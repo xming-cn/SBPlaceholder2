@@ -1,7 +1,7 @@
 package com.xming.sbplaceholder2.parser.type.entrust;
 
 import com.xming.sbplaceholder2.parser.type.SBElement;
-import com.xming.sbplaceholder2.parser.type.inst.*;
+import com.xming.sbplaceholder2.parser.type.element.*;
 import com.xming.sbplaceholder2.parser.type.type.ExpressionType;
 import org.apache.commons.lang.math.NumberUtils;
 

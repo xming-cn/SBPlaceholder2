@@ -1,4 +1,4 @@
-package com.xming.sbplaceholder2.parser.type.inst;
+package com.xming.sbplaceholder2.parser.type.element;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.common.ArrayUtils;

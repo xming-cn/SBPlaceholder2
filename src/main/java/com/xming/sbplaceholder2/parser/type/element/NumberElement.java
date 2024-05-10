@@ -1,10 +1,9 @@
-package com.xming.sbplaceholder2.parser.type.inst;
+package com.xming.sbplaceholder2.parser.type.element;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.ElementMethod;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.CalculableElement;
-import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
 import com.xming.sbplaceholder2.parser.type.type.NumberType;
 import org.bukkit.plugin.Plugin;
@@ -43,10 +42,6 @@ public class NumberElement extends CalculableElement<NumberType> {
     @Override
     public StringElement asString() {
         return new StringElement(value.toString());
-    }
-    @Override
-    public Integer symbol_compare(SBElement<?> other) {
-        return value.compareTo(other.asNumber().value);
     }
     @ElementMethod(name = "round", returnType = "Int")
     public IntElement method_round(Parser parser, EntrustInst... args) {

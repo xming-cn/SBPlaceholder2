@@ -4,8 +4,8 @@ import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.SBType;
+import com.xming.sbplaceholder2.parser.type.element.FunctionElement;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
-import com.xming.sbplaceholder2.parser.type.inst.FunctionElement;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -34,11 +34,11 @@ public class FunctionType extends SBType<FunctionElement> {
             args.add(insts[i].execute(parser).asString().value);
         }
         return new FunctionElement(
-                (SBElement<?>... inst) -> {
+                (Parser p, SBElement<?>... inst) -> {
                     for (int i = 0; i < args.size(); i++) {
-                        parser.getVariables().put(args.get(i), inst[i]);
+                        p.getVariables().put(args.get(i), inst[i]);
                     }
-                    return insts[insts.length-1].execute(parser);
+                    return insts[insts.length-1].execute(p);
                 }
         );
     }

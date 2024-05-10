@@ -6,7 +6,7 @@
 
     <groupId>com.xming</groupId>
     <artifactId>SBPlaceholder</artifactId>
-    <version>2.2-dev2</version>
+    <version>2.2-dev5</version>
     <packaging>jar</packaging>
 
     <name>SBPlaceholder2</name>

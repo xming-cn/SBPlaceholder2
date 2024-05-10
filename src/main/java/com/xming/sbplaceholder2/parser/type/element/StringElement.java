@@ -1,4 +1,4 @@
-package com.xming.sbplaceholder2.parser.type.inst;
+package com.xming.sbplaceholder2.parser.type.element;
 
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.ElementMethod;
@@ -9,6 +9,7 @@ import com.xming.sbplaceholder2.parser.type.type.ListType;
 import com.xming.sbplaceholder2.parser.type.type.StringType;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
@@ -193,6 +194,14 @@ public class StringElement extends SBElement<StringType> {
                 value.chars()
                         .mapToObj(i -> new EntrustInst(new StringElement(String.valueOf((char) i))))
                         .toArray(EntrustInst[]::new));
+    }
+    @ElementMethod(name = "isInt", returnType = "Bool")
+    public BoolElement method_isInt(Parser parser, EntrustInst[] args) {
+        return BoolElement.fromBool(NumberUtils.isDigits(value));
+    }
+    @ElementMethod(name = "isNumber", returnType = "Bool")
+    public BoolElement method_isNumber(Parser parser, EntrustInst[] args) {
+        return BoolElement.fromBool(NumberUtils.isNumber(value));
     }
     @Override
     public int hashCode() {

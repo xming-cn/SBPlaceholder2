@@ -5,9 +5,9 @@ import com.xming.sbplaceholder2.event.FastElementBuildEvent;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBElement;
 import com.xming.sbplaceholder2.parser.type.TypeManager;
-import com.xming.sbplaceholder2.parser.type.inst.ExpressionElement;
-import com.xming.sbplaceholder2.parser.type.inst.StringElement;
-import com.xming.sbplaceholder2.parser.type.inst.VoidElement;
+import com.xming.sbplaceholder2.parser.type.element.ExpressionElement;
+import com.xming.sbplaceholder2.parser.type.element.StringElement;
+import com.xming.sbplaceholder2.parser.type.element.VoidElement;
 import com.xming.sbplaceholder2.parser.type.type.TypeType;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -103,9 +103,10 @@ public class EntrustInst implements Cloneable {
                         break;
                 }
             } catch (Exception e) {
-                StringBuilder cause = new StringBuilder("执行 " + task.type().name() + " 委托时发生错误\n" +
-                        "委托对象: " + object.toDebug() + "\n" +
-                        "委托名: " + task.name() + "\n");
+                StringBuilder cause = new StringBuilder("执行 " + task.type().name() + " 委托时发生错误\n")
+                        .append("委托对象: ").append(object.toDebug()).append("\n")
+                        .append("委托名: ").append(task.name()).append("\n")
+                        .append("错误定位: ").append(e.getMessage()).append("\n");
                 if (task.args() != null && task.args().length > 0) {
                     cause.append("委托参数: ");
                     for (int i = 0; i < task.args().length; i++) {

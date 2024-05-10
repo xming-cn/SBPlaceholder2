@@ -3,8 +3,8 @@ package com.xming.sbplaceholder2.parser.type.type;
 import com.xming.sbplaceholder2.SBPlaceholder2;
 import com.xming.sbplaceholder2.parser.Parser;
 import com.xming.sbplaceholder2.parser.type.SBType;
+import com.xming.sbplaceholder2.parser.type.element.NumberElement;
 import com.xming.sbplaceholder2.parser.type.entrust.EntrustInst;
-import com.xming.sbplaceholder2.parser.type.inst.NumberElement;
 import org.bukkit.plugin.Plugin;
 
 public class NumberType extends SBType<NumberElement> {
